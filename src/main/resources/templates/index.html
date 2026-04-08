@@ -1,0 +1,43 @@
+<div th:replace="layout :: layout(${pageTitle}, ${active}, ${logoUrl})">
+
+    <div th:fragment="content">
+
+        <div class="section-header">
+            <h3>Lista de Oficios</h3>
+            <span class="record-count" th:text="${#lists.size(oficios)} + ' registros'">0 registros</span>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Oficio</th>
+                        <th>Apellido Paterno</th>
+                        <th>Nombre</th>
+                        <th>Empleado (Atendió)</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="oficio : ${oficios}">
+                        <td><span class="oficio-badge" th:text="${oficio.numeroOficio}">0001</span></td>
+                        <td th:text="${oficio.apellidoPaterno}">García</td>
+                        <td th:text="${oficio.nombre}">Juan</td>
+                        <td th:text="${oficio.empleado}">Admin</td>
+                        <td th:text="${oficio.fecha}">01/04/2026</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(oficios)}">
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div class="empty-title">Sin registros</div>
+                                <p>No hay oficios registrados aún.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

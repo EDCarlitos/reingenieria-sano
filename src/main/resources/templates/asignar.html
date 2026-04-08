@@ -1,0 +1,93 @@
+
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${pageTitle} ?: 'Asignar Número de Oficio'">Asignar Número de Oficio</title>
+  <link rel="stylesheet" th:href="@{/css/asignar.css}">
+</head>
+<body>
+<div th:replace="layout :: layout(${pageTitle}, ${active}, ${logoUrl})">
+
+    <div th:fragment="content">
+
+      <div class="section-header">
+        <h3>Asignar Número de Oficio</h3>
+      </div>
+
+      <div class="card form-card">
+        <form th:action="@{/asignar-numero}" method="post" class="form-grid">
+
+          <fieldset class="card-section">
+            <legend>Datos generales del destinatario</legend>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombres">Nombres</label>
+                <input id="nombres" name="nombres" type="text" class="input" />
+              </div>
+              <div class="form-group">
+                <label for="apellidoPaterno">Apellido Paterno</label>
+                <input id="apellidoPaterno" name="apellidoPaterno" type="text" class="input" />
+              </div>
+              <div class="form-group">
+                <label for="apellidoMaterno">Apellido Materno</label>
+                <input id="apellidoMaterno" name="apellidoMaterno" type="text" class="input" />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="card-section">
+            <legend>Datos del oficio</legend>
+
+            <div class="form-row">
+              <div class="form-group checkbox-group">
+                <input id="enContestacion" name="enContestacion" type="checkbox" />
+                <label for="enContestacion">En contestación?</label>
+              </div>
+
+              <div class="form-group">
+                <label for="contestaOficio">Contesta Oficio (N°)</label>
+                <input id="contestaOficio" name="contestaOficio" type="text" class="input" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="asunto">Asunto</label>
+                <input id="asunto" name="asunto" type="text" class="input" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="observaciones">Observaciones</label>
+                <textarea id="observaciones" name="observaciones" rows="4" class="input"></textarea>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="funcionario">Funcionario</label>
+                <select id="funcionario" name="funcionario" class="input">
+                  <option value="" th:if="${#lists.isEmpty(funcionarios)}">-- No hay funcionarios --</option>
+                  <option th:each="f : ${funcionarios}" th:value="${f.id}" th:text="${f.nombre + ' — ' + f.puesto}">Funcionario</option>
+                </select>
+              </div>
+            </div>
+
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Asignar número</button>
+            <a th:href="@{/}" class="btn secondary">Cancelar</a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+
+
+</div>
+</body>
+</html>

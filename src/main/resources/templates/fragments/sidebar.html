@@ -1,0 +1,29 @@
+  <div th:fragment="sidebar(active, logoUrl)">
+    <button id="sidebarToggle" class="mobile-menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <div id="sidebarOverlay" class="sidebar-overlay" tabindex="-1"></div>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <img th:if="${logoUrl != null}" th:src="@{${logoUrl}}" alt="Logo empresa">
+          <span th:if="${logoUrl == null}" class="logo-initial">S</span>
+        </div>
+        <div class="company-name">Sano</div>
+        <div class="company-sub">Sistema de Oficios</div>
+        <button id="sidebarClose" class="sidebar-close" aria-label="Cerrar menú">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-label">Acciones</span>
+        <a th:href="@{/asignar-numero}" th:classappend="${active == 'asignar'} ? ' active' : ''">Asignar Número</a>
+        <a th:href="@{/buscar-oficio}" th:classappend="${active == 'buscar'} ? ' active' : ''">Buscar Oficio</a>
+        <a th:href="@{/cancelar-oficio}" th:classappend="${active == 'cancelar'} ? ' active' : ''">Cancelar Oficio</a>
+        <a th:href="@{/generar-reportes}" th:classappend="${active == 'reportes'} ? ' active' : ''">Generar Reportes</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <nav class="sidebar-nav">
+          <a th:href="@{/logout}" th:classappend="${active == 'salir'} ? ' danger active' : ' danger'">Salir / Cerrar Sesión</a>
+        </nav>
+      </div>
+    </aside>
+  </div>
