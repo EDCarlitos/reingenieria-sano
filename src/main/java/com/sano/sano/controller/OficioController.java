@@ -7,6 +7,7 @@ import java.util.List;
 import com.sano.sano.dto.OficioSaveDto;
 import com.sano.sano.models.Funcionario;
 import com.sano.sano.repositorios.FuncionarioRepository;
+import com.sano.sano.services.FuncionarioService;
 import com.sano.sano.services.OficioService;
 
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class OficioController {
 
-    private final FuncionarioRepository funcionarioRepository;
+    private final FuncionarioService funcionarioService;
     private final OficioService oficioService;
 
     @GetMapping
@@ -38,7 +39,7 @@ public class OficioController {
 
         List<Funcionario> funcionarios;
         try {
-            funcionarios = funcionarioRepository.findAll();
+            funcionarios = funcionarioService.getAllFuncionarios();
         } catch (Exception ex) {
             System.err.println("Warning: could not load funcionarios: " + ex.getMessage());
             funcionarios = List.of();
@@ -61,7 +62,7 @@ public class OficioController {
 
             List<Funcionario> funcionarios;
             try {
-                funcionarios = funcionarioRepository.findAll();
+                funcionarios = funcionarioService.getAllFuncionarios();
             } catch (Exception ex) {
                 System.err.println("Warning: could not load funcionarios: " + ex.getMessage());
                 funcionarios = List.of();
