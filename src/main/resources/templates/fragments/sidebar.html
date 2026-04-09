@@ -1,11 +1,10 @@
-  <div th:fragment="sidebar(active, logoUrl)">
+  <div th:fragment="sidebar(active)">
     <button id="sidebarToggle" class="mobile-menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button>
     <div id="sidebarOverlay" class="sidebar-overlay" tabindex="-1"></div>
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-area">
-          <img th:if="${logoUrl != null}" th:src="@{${logoUrl}}" alt="Logo empresa">
-          <span th:if="${logoUrl == null}" class="logo-initial">S</span>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6v4hPPDO9V4BR5Ck-aDigPDL2WqFRpkUIWA&amp;s" alt="Logo empresa">
         </div>
         <div class="company-name">Sano</div>
         <div class="company-sub">Sistema de Oficios</div>

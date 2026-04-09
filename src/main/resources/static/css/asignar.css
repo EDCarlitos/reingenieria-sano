@@ -3,10 +3,10 @@
    ============================= */
 
 .form-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 32px rgba(59,130,246,0.08), 0 1.5px 8px rgba(16,23,42,0.04);
-  border: 1px solid #e0e7ef;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-light);
   padding: 32px 28px 24px 28px;
   max-width: 600px;
   margin: 0 auto;
@@ -27,7 +27,7 @@
 .card-section legend {
   font-size: 15px;
   font-weight: 700;
-  color: #2563eb;
+  color: var(--color-primary);
   margin-bottom: 10px;
   letter-spacing: 0.2px;
 }
@@ -48,27 +48,27 @@
 
 .form-group label {
   font-size: 13.5px;
-  color: #334155;
+  color: var(--color-text-mid);
   margin-bottom: 5px;
   font-weight: 600;
   letter-spacing: 0.1px;
 }
 
 .input, input[type="text"], textarea, select {
-  border: 1.5px solid #e0e7ef;
-  background: #f8fafc;
+  border: 1.5px solid var(--color-border-light);
+  background: var(--color-surface-alt);
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 15px;
-  color: #0f172a;
+  color: var(--color-text-dark);
   transition: border-color 0.18s, box-shadow 0.18s;
   font-family: inherit;
 }
 
 .input:focus, input[type="text"]:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px #dbeafe;
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
 }
 
 .checkbox-group {
@@ -90,7 +90,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 22px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 700;
   cursor: pointer;
@@ -100,29 +100,29 @@
 }
 
 .btn.primary {
-  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  color: var(--color-surface);
+  box-shadow: var(--shadow-button);
 }
 
 .btn.primary:hover {
-  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+  background: linear-gradient(90deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
 }
 
 .btn.secondary {
-  background: #f1f5f9;
-  color: #2563eb;
-  border: 1.5px solid #e0e7ef;
+  background: var(--color-bg);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-border-light);
 }
 
 .btn.secondary:hover {
-  background: #e0e7ef;
-  color: #1e293b;
+  background: var(--color-border-light);
+  color: var(--color-text);
 }
 
 select.input {
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%233b82f6" height="18" viewBox="0 0 20 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%232563eb" height="18" viewBox="0 0 20 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>');
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 18px 18px;

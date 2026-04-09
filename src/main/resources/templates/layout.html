@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(pageTitle, active, logoUrl)">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(pageTitle, active)">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pageTitle} ?: 'Sano'">Sano</title>
+    <link rel="stylesheet" th:href="@{/css/variables.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 </head>
 <body>
 
     <!-- SIDEBAR -->
-    <div th:replace="fragments/sidebar :: sidebar(active=${active}, logoUrl=${logoUrl})"></div>
+    <div th:replace="fragments/sidebar :: sidebar(active=${active})"></div>
 
     <!-- MAIN -->
     <div class="main">
