@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 @Document(collection = "oficios")
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class Oficio {
 
@@ -22,6 +21,7 @@ public class Oficio {
     private String materno;
     private String nombres;
     private String contesta;
+    private boolean esRespuesta;
     private String asunto;
     private String observacion;
     private Funcionario funcionario;

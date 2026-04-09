@@ -386,3 +386,9 @@ body {
     /* let main content take full width */
     .main { width: 100%; }
 }
+
+
+.error{
+    color: red;
+    
+}

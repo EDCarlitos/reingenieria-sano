@@ -16,22 +16,25 @@
       </div>
 
       <div class="card form-card">
-        <form th:action="@{/asignar-numero}" method="post" class="form-grid">
+        <form th:action="@{/asignar-numero}" th:object="${oficioSaveDto}" method="post" class="form-grid">
 
           <fieldset class="card-section">
             <legend>Datos generales del destinatario</legend>
             <div class="form-row">
               <div class="form-group">
                 <label for="nombres">Nombres</label>
-                <input id="nombres" name="nombres" type="text" class="input" />
+                <input id="nombres" th:field="*{nombres}" type="text" class="input" />
+                <div class="error" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
               </div>
               <div class="form-group">
-                <label for="apellidoPaterno">Apellido Paterno</label>
-                <input id="apellidoPaterno" name="apellidoPaterno" type="text" class="input" />
+                <label for="paterno">Apellido Paterno</label>
+                <input id="paterno" th:field="*{paterno}" type="text" class="input" />
+                <div class="error" th:if="${#fields.hasErrors('paterno')}" th:errors="*{paterno}"></div>
               </div>
               <div class="form-group">
-                <label for="apellidoMaterno">Apellido Materno</label>
-                <input id="apellidoMaterno" name="apellidoMaterno" type="text" class="input" />
+                <label for="materno">Apellido Materno</label>
+                <input id="materno" th:field="*{materno}" type="text" class="input" />
+                <div class="error" th:if="${#fields.hasErrors('materno')}" th:errors="*{materno}"></div>
               </div>
             </div>
           </fieldset>
@@ -41,37 +44,41 @@
 
             <div class="form-row">
               <div class="form-group checkbox-group">
-                <input id="enContestacion" name="enContestacion" type="checkbox" />
-                <label for="enContestacion">En contestación?</label>
+                <input id="esRespuesta" th:field="*{esRespuesta}" type="checkbox" />
+                <label for="esRespuesta">En contestación?</label>
               </div>
 
               <div class="form-group">
-                <label for="contestaOficio">Contesta Oficio (N°)</label>
-                <input id="contestaOficio" name="contestaOficio" type="text" class="input" />
+                <label for="contesta">Contesta Oficio (N°)</label>
+                <input id="contesta" th:field="*{contesta}" type="text" class="input" />
+                <div class="error" th:if="${#fields.hasErrors('contesta')}" th:errors="*{contesta}"></div>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group full-width">
                 <label for="asunto">Asunto</label>
-                <input id="asunto" name="asunto" type="text" class="input" />
+                <input id="asunto" th:field="*{asunto}" type="text" class="input" />
+                <div class="error" th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}"></div>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group full-width">
-                <label for="observaciones">Observaciones</label>
-                <textarea id="observaciones" name="observaciones" rows="4" class="input"></textarea>
+                <label for="observacion">Observaciones</label>
+                <textarea id="observacion" th:field="*{observacion}" rows="4" class="input"></textarea>
+                <div class="error" th:if="${#fields.hasErrors('observacion')}" th:errors="*{observacion}"></div>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="funcionario">Funcionario</label>
-                <select id="funcionario" name="funcionario" class="input">
+                <label for="funcionarioId">Funcionario</label>
+                <select id="funcionarioId" th:field="*{funcionarioId}" class="input">
                   <option value="" th:if="${#lists.isEmpty(funcionarios)}">-- No hay funcionarios --</option>
                   <option th:each="f : ${funcionarios}" th:value="${f.id}" th:text="${f.nombre + ' — ' + f.puesto}">Funcionario</option>
                 </select>
+                <div class="error" th:if="${#fields.hasErrors('funcionarioId')}" th:errors="*{funcionarioId}"></div>
               </div>
             </div>
 
