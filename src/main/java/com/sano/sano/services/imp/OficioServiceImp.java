@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 import org.springframework.stereotype.Service;
 
-import com.sano.dto.OficioSaveDto;
+import com.sano.sano.dto.OficioSaveDto;
 import com.sano.sano.models.Funcionario;
 import com.sano.sano.models.Oficio;
 import com.sano.sano.repositorios.FuncionarioRepository;

@@ -1,4 +1,4 @@
-package com.sano.dto;
+package com.sano.sano.dto;
 
 
 import jakarta.validation.constraints.NotEmpty;

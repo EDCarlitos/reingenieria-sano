@@ -1,8 +1,7 @@
 package com.sano.sano.services;
 
-import org.springframework.stereotype.Service;
 
-import com.sano.dto.OficioSaveDto;
+import com.sano.sano.dto.OficioSaveDto;
 
 public interface OficioService {
     

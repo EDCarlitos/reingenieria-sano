@@ -1,4 +1,4 @@
-package com.sano.config;
+package com.sano.sano.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
