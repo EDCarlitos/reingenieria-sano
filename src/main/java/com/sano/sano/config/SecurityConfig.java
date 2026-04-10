@@ -31,10 +31,12 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/css/**", "/js/**", "/error").permitAll()
                 .requestMatchers(
                     "/", "/asignar-numero", "/buscar-oficio",
-                    "/generar-reportes", "/sistema-info"
+                    "/generar-reportes", "/generar-reportes/**", "/sistema-info"
                 ).hasAnyRole("ADMIN", "EMPLEADO")
                 .requestMatchers("/api/**").hasAnyRole("ADMIN", "EMPLEADO")
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/funcionarios/**").hasRole("ADMIN")
+                .requestMatchers("/logs/**").hasRole("ADMIN")
                 .anyRequest().hasRole("ADMIN")
             )
             .formLogin(form -> form

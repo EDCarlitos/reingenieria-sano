@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Logs'">Logs</title>
+    <link rel="stylesheet" th:href="@{/css/logs.css}">
+</head>
+<body>
+<div th:replace="layout :: layout(${pageTitle}, ${active})">
+
+    <div th:fragment="content">
+
+        <!-- ═══════════════════════════════════════════
+             PAGE HERO
+        ═══════════════════════════════════════════ -->
+        <div class="log-hero">
+            <div class="log-hero-left">
+                <div class="log-hero-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                    <h2>Registro de Actividad</h2>
+                    <p>Historial de acciones realizadas en el sistema</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             STATS BAR
+        ═══════════════════════════════════════════ -->
+        <div class="log-stats" id="logStats">
+            <div class="log-stat">
+                <span class="log-stat-value" id="statTotal">—</span>
+                <span class="log-stat-label">Total</span>
+            </div>
+            <div class="log-stat">
+                <span class="log-stat-value log-stat-value--crear" id="statCrear">—</span>
+                <span class="log-stat-label">Creaciones</span>
+            </div>
+            <div class="log-stat">
+                <span class="log-stat-value log-stat-value--editar" id="statEditar">—</span>
+                <span class="log-stat-label">Ediciones</span>
+            </div>
+            <div class="log-stat">
+                <span class="log-stat-value log-stat-value--eliminar" id="statEliminar">—</span>
+                <span class="log-stat-label">Eliminaciones</span>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             FILTERS
+        ═══════════════════════════════════════════ -->
+        <div class="log-filters">
+            <div class="log-filter-group">
+                <label for="filterAccion">Acción</label>
+                <select id="filterAccion">
+                    <option value="">Todas</option>
+                    <option value="CREAR">Crear</option>
+                    <option value="EDITAR">Editar</option>
+                    <option value="ELIMINAR">Eliminar</option>
+                </select>
+            </div>
+            <div class="log-filter-group">
+                <label for="filterEntidad">Entidad</label>
+                <select id="filterEntidad">
+                    <option value="">Todas</option>
+                    <option value="OFICIO">Oficio</option>
+                    <option value="USUARIO">Usuario</option>
+                    <option value="FUNCIONARIO">Funcionario</option>
+                </select>
+            </div>
+            <div class="log-filter-group">
+                <label for="filterUsuario">Usuario</label>
+                <input type="text" id="filterUsuario" placeholder="Buscar por usuario…">
+            </div>
+            <button type="button" class="log-btn-clear" id="btnClear">Limpiar</button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             LOGS TABLE
+        ═══════════════════════════════════════════ -->
+        <div class="log-panel">
+            <div class="log-panel-header">
+                <h3>Registros</h3>
+                <span class="log-panel-count" id="logCount">0 registros</span>
+            </div>
+
+            <div class="log-table-wrap" id="logTableWrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha / Hora</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Entidad</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Empty -->
+            <div class="log-empty" id="logEmpty" style="display:none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <p class="log-empty-title">Sin registros</p>
+                <p class="log-empty-sub">Aún no se han registrado acciones en el sistema</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="log-loading" id="logLoading">
+                <div class="spinner"></div>
+                <span>Cargando registros…</span>
+            </div>
+        </div>
+
+        <script th:src="@{/js/logs.js}"></script>
+    </div>
+
+</div>
+</body>
+</html>

@@ -6,7 +6,16 @@
     <title th:text="${pageTitle} ?: 'Sano'">Sano</title>
     <link rel="stylesheet" th:href="@{/css/variables.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+
+    <!-- Page-specific CSS -->
+    <link th:if="${active == 'oficios'}"       rel="stylesheet" th:href="@{/css/index.css}">
+    <link th:if="${active == 'asignar'}"       rel="stylesheet" th:href="@{/css/asignar.css}">
+    <link th:if="${active == 'buscar'}"        rel="stylesheet" th:href="@{/css/buscar-oficio.css}">
+    <link th:if="${active == 'funcionarios'}"  rel="stylesheet" th:href="@{/css/funcionarios.css}">
+    <link th:if="${active == 'reportes'}"      rel="stylesheet" th:href="@{/css/reportes.css}">
+    <link th:if="${active == 'usuarios'}"      rel="stylesheet" th:href="@{/css/usuarios.css}">
+    <link th:if="${active == 'logs'}"          rel="stylesheet" th:href="@{/css/logs.css}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
@@ -37,7 +46,7 @@
     </div>
 
     <script th:src="@{/js/sidebar.js}"></script>
-    <script th:src="@{/js/index.js}"></script>
+    <script th:if="${active == 'oficios'}" th:src="@{/js/index.js}"></script>
 
 </body>
 </html>

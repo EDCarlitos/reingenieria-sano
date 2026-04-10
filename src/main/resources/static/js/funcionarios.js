@@ -1,15 +1,15 @@
 /* ============================================================
-   USUARIOS — Client-side CRUD
+   FUNCIONARIOS — Client-side CRUD
    ============================================================ */
 (function () {
     'use strict';
 
     /* ── DOM refs ── */
-    var tbody        = document.getElementById('usrTbody');
-    var tableWrap    = document.getElementById('usrTableWrap');
-    var emptyState   = document.getElementById('usrEmpty');
-    var loading      = document.getElementById('usrLoading');
-    var countEl      = document.getElementById('usrCount');
+    var tbody        = document.getElementById('fnTbody');
+    var tableWrap    = document.getElementById('fnTableWrap');
+    var emptyState   = document.getElementById('fnEmpty');
+    var loading      = document.getElementById('fnLoading');
+    var countEl      = document.getElementById('fnCount');
     var statTotal    = document.getElementById('statTotal');
     var statActivos  = document.getElementById('statActivos');
     var statInactivos= document.getElementById('statInactivos');
@@ -19,23 +19,19 @@
     var modalTitle   = document.getElementById('modalTitle');
     var modalClose   = document.getElementById('modalClose');
     var btnCancel    = document.getElementById('btnCancel');
-    var form         = document.getElementById('usrForm');
+    var form         = document.getElementById('fnForm');
     var formError    = document.getElementById('formError');
-    var pwdHint      = document.getElementById('pwdHint');
 
     var fId          = document.getElementById('fId');
-    var fUsername     = document.getElementById('fUsername');
-    var fPassword    = document.getElementById('fPassword');
-    var fRol         = document.getElementById('fRol');
+    var fNombre      = document.getElementById('fNombre');
+    var fPuesto      = document.getElementById('fPuesto');
     var btnSave      = document.getElementById('btnSave');
 
     var toast        = document.getElementById('toast');
 
-    var API = '/usuarios/api';
+    var API = '/funcionarios/api';
 
-    var currentUsername = window.CURRENT_USERNAME || '';
-
-    /* ── CSRF helper — read from XSRF-TOKEN cookie ── */
+    /* ── CSRF helper ── */
     function getCsrfToken() {
         var match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
         return match ? decodeURIComponent(match[1]) : '';
@@ -53,33 +49,28 @@
     function showToast(msg, isError) {
         clearTimeout(toastTimer);
         toast.textContent = msg;
-        toast.className = 'usr-toast show' + (isError ? ' usr-toast--error' : '');
-        toastTimer = setTimeout(function () { toast.className = 'usr-toast'; }, 3000);
+        toast.className = 'fn-toast show' + (isError ? ' fn-toast--error' : '');
+        toastTimer = setTimeout(function () { toast.className = 'fn-toast'; }, 3000);
     }
 
     /* ── Modal ── */
     function openModal(editMode, data) {
         formError.style.display = 'none';
         fId.value = '';
-        fUsername.value = '';
-        fPassword.value = '';
-        fRol.value = 'EMPLEADO';
+        fNombre.value = '';
+        fPuesto.value = '';
 
         if (editMode && data) {
-            modalTitle.textContent = 'Editar Usuario';
+            modalTitle.textContent = 'Editar Funcionario';
             fId.value = data.id;
-            fUsername.value = data.username;
-            fRol.value = data.rol;
-            pwdHint.style.display = '';
-            fPassword.removeAttribute('required');
+            fNombre.value = data.nombre;
+            fPuesto.value = data.puesto;
         } else {
-            modalTitle.textContent = 'Nuevo Usuario';
-            pwdHint.style.display = 'none';
-            fPassword.setAttribute('required', '');
+            modalTitle.textContent = 'Nuevo Funcionario';
         }
 
         overlay.classList.add('open');
-        setTimeout(function () { fUsername.focus(); }, 150);
+        setTimeout(function () { fNombre.focus(); }, 150);
     }
 
     function closeModal() {
@@ -100,9 +91,8 @@
 
         var id = fId.value;
         var payload = {
-            username: fUsername.value.trim(),
-            password: fPassword.value,
-            rol: fRol.value
+            nombre: fNombre.value.trim(),
+            puesto: fPuesto.value.trim()
         };
 
         btnSave.disabled = true;
@@ -120,8 +110,8 @@
                     return;
                 }
                 closeModal();
-                showToast(id ? 'Usuario actualizado' : 'Usuario creado');
-                loadUsers();
+                showToast(id ? 'Funcionario actualizado' : 'Funcionario creado');
+                loadFuncionarios();
             })
             .catch(function () {
                 formError.textContent = 'Error de conexión';
@@ -136,76 +126,73 @@
     /* ── Toggle activo ── */
     function toggleActivo(id, currentlyActive) {
         var action = currentlyActive ? 'desactivar' : 'reactivar';
-        if (!confirm('¿Deseas ' + action + ' este usuario?')) return;
+        if (!confirm('¿Deseas ' + action + ' este funcionario?')) return;
 
         fetch(API + '/' + id + '/toggle', { method: 'PATCH', headers: apiHeaders() })
             .then(function (res) {
                 if (!res.ok) throw new Error();
-                showToast(currentlyActive ? 'Usuario desactivado' : 'Usuario reactivado');
-                loadUsers();
+                showToast(currentlyActive ? 'Funcionario desactivado' : 'Funcionario reactivado');
+                loadFuncionarios();
             })
             .catch(function () { showToast('Error al cambiar estado', true); });
     }
 
     /* ── Edit ── */
-    function editUser(id) {
+    function editFuncionario(id) {
         fetch(API + '/' + id, { headers: apiHeaders() })
             .then(function (res) { return res.json(); })
             .then(function (data) { openModal(true, data); })
-            .catch(function () { showToast('Error al cargar usuario', true); });
+            .catch(function () { showToast('Error al cargar funcionario', true); });
     }
 
     /* ── Render table ── */
-    function renderUsers(users) {
-        if (!users.length) {
+    function renderFuncionarios(items) {
+        if (!items.length) {
             tableWrap.style.display = 'none';
             emptyState.style.display = '';
             countEl.textContent = '0 registros';
+            statTotal.textContent = '0';
+            statActivos.textContent = '0';
+            statInactivos.textContent = '0';
             return;
         }
 
         tableWrap.style.display = '';
         emptyState.style.display = 'none';
-        countEl.textContent = users.length + ' registro' + (users.length !== 1 ? 's' : '');
+        countEl.textContent = items.length + ' registro' + (items.length !== 1 ? 's' : '');
 
         var activos = 0, inactivos = 0;
-        users.forEach(function (u) { u.activo ? activos++ : inactivos++; });
-        statTotal.textContent = users.length;
+        items.forEach(function (f) { f.activo ? activos++ : inactivos++; });
+        statTotal.textContent = items.length;
         statActivos.textContent = activos;
         statInactivos.textContent = inactivos;
 
         var html = '';
-        users.forEach(function (u) {
-            var initial = u.username.charAt(0).toUpperCase();
-            var isActive = u.activo;
+        items.forEach(function (f) {
+            var initial = f.nombre.charAt(0).toUpperCase();
+            var isActive = f.activo;
             var rowClass = isActive ? '' : ' class="row-inactive"';
-            var avatarCls = isActive ? 'usr-avatar' : 'usr-avatar usr-avatar--inactive';
-            var rolCls = u.rol === 'ADMIN' ? 'usr-role usr-role--admin' : 'usr-role usr-role--empleado';
-            var statusCls = isActive ? 'usr-status usr-status--activo' : 'usr-status usr-status--inactivo';
+            var avatarCls = isActive ? 'fn-avatar' : 'fn-avatar fn-avatar--inactive';
+            var statusCls = isActive ? 'fn-status fn-status--activo' : 'fn-status fn-status--inactivo';
             var statusText = isActive ? 'Activo' : 'Inactivo';
 
-            var isSelf = (u.username === currentUsername);
-            var toggleBtn = '';
-            if (!isSelf) {
-                var toggleIcon = isActive
-                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
-                    : '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38"/></svg>';
-                var toggleCls = isActive ? 'usr-action-btn usr-action-btn--danger' : 'usr-action-btn usr-action-btn--restore';
-                var toggleTitle = isActive ? 'Desactivar' : 'Reactivar';
-                toggleBtn = '<button class="' + toggleCls + '" title="' + toggleTitle + '" data-toggle="' + u.id + '" data-active="' + isActive + '">'
-                    + toggleIcon
-                    + '</button>';
-            }
+            var toggleIcon = isActive
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38"/></svg>';
+            var toggleCls = isActive ? 'fn-action-btn fn-action-btn--danger' : 'fn-action-btn fn-action-btn--restore';
+            var toggleTitle = isActive ? 'Desactivar' : 'Reactivar';
 
             html += '<tr' + rowClass + '>'
-                + '<td><div class="usr-cell-name"><div class="' + avatarCls + '">' + initial + '</div><span class="usr-name-text">' + escHtml(u.username) + '</span></div></td>'
-                + '<td><span class="' + rolCls + '">' + escHtml(u.rol) + '</span></td>'
-                + '<td><span class="' + statusCls + '"><span class="usr-status-dot"></span>' + statusText + '</span></td>'
+                + '<td><div class="fn-cell-name"><div class="' + avatarCls + '">' + initial + '</div><span class="fn-name-text">' + escHtml(f.nombre) + '</span></div></td>'
+                + '<td><span class="fn-puesto">' + escHtml(f.puesto) + '</span></td>'
+                + '<td><span class="' + statusCls + '"><span class="fn-status-dot"></span>' + statusText + '</span></td>'
                 + '<td class="td-actions">'
-                    + '<button class="usr-action-btn" title="Editar" data-edit="' + u.id + '">'
+                    + '<button class="fn-action-btn" title="Editar" data-edit="' + f.id + '">'
                         + '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>'
                     + '</button>'
-                    + toggleBtn
+                    + '<button class="' + toggleCls + '" title="' + toggleTitle + '" data-toggle="' + f.id + '" data-active="' + isActive + '">'
+                        + toggleIcon
+                    + '</button>'
                 + '</td>'
                 + '</tr>';
         });
@@ -222,14 +209,14 @@
     /* ── Delegation for table buttons ── */
     tbody.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-edit]');
-        if (btn) { editUser(btn.getAttribute('data-edit')); return; }
+        if (btn) { editFuncionario(btn.getAttribute('data-edit')); return; }
 
         btn = e.target.closest('[data-toggle]');
         if (btn) { toggleActivo(btn.getAttribute('data-toggle'), btn.getAttribute('data-active') === 'true'); }
     });
 
-    /* ── Load users ── */
-    function loadUsers() {
+    /* ── Load funcionarios ── */
+    function loadFuncionarios() {
         loading.style.display = '';
         tableWrap.style.display = 'none';
         emptyState.style.display = 'none';
@@ -238,15 +225,15 @@
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 loading.style.display = 'none';
-                renderUsers(data);
+                renderFuncionarios(data);
             })
             .catch(function () {
                 loading.style.display = 'none';
-                showToast('Error al cargar usuarios', true);
+                showToast('Error al cargar funcionarios', true);
             });
     }
 
     /* ── Init ── */
-    loadUsers();
+    loadFuncionarios();
 
 })();

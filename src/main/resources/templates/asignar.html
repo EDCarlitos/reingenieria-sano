@@ -75,7 +75,7 @@
               <div class="form-group">
                 <label for="funcionarioId">Funcionario</label>
                 <select id="funcionarioId" th:field="*{funcionarioId}" class="input">
-                  <option value="" th:if="${#lists.isEmpty(funcionarios)}">-- No hay funcionarios --</option>
+                  <option value="">— Seleccione un funcionario —</option>
                   <option th:each="f : ${funcionarios}" th:value="${f.id}" th:text="${f.nombre + ' — ' + f.puesto}">Funcionario</option>
                 </select>
                 <div class="error" th:if="${#fields.hasErrors('funcionarioId')}" th:errors="*{funcionarioId}"></div>

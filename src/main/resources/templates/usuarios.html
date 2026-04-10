@@ -127,6 +127,9 @@
         ═══════════════════════════════════════════ -->
         <div class="usr-toast" id="toast"></div>
 
+        <script th:inline="javascript">
+            window.CURRENT_USERNAME = /*[[${currentUsername}]]*/ '';
+        </script>
         <script th:src="@{/js/usuarios.js}"></script>
     </div>
 

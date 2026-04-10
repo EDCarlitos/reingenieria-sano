@@ -339,6 +339,30 @@
        EDIT / DELETE HANDLERS
     ═══════════════════════════════════════════ */
 
+    function loadFuncionariosIntoSelect(selectEl, selectedId) {
+        fetch('/funcionarios/api')
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function (funcionarios) {
+                selectEl.innerHTML = '<option value="">— Seleccione —</option>';
+                funcionarios.forEach(function (f) {
+                    if (!f.activo) return;
+                    var opt = document.createElement('option');
+                    opt.value = f.id;
+                    opt.textContent = f.nombre + ' — ' + (f.puesto || '');
+                    if (f.id === selectedId) opt.selected = true;
+                    selectEl.appendChild(opt);
+                });
+            })
+            .catch(function () {
+                if (!selectEl.options.length || selectEl.options.length <= 1) {
+                    selectEl.innerHTML = '<option value="">— Error al cargar —</option>';
+                }
+            });
+    }
+
     function handleEdit(id) {
         var oficio = oficiosMap[id];
         if (!oficio || !modalEditar) return;
@@ -353,7 +377,8 @@
         document.getElementById('editObservacion').value = oficio.observacion || '';
 
         var funcSelect = document.getElementById('editFuncionarioId');
-        funcSelect.value = (oficio.funcionario && oficio.funcionario.id) ? oficio.funcionario.id : '';
+        var selectedFuncId = (oficio.funcionario && oficio.funcionario.id) ? oficio.funcionario.id : '';
+        loadFuncionariosIntoSelect(funcSelect, selectedFuncId);
 
         openModal(modalEditar);
     }

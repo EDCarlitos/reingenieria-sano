@@ -24,6 +24,7 @@ import com.sano.sano.dto.OficioSaveDto;
 import com.sano.sano.dto.OficioUpdateDto;
 import com.sano.sano.dto.PageResultDto;
 import com.sano.sano.models.Usuario;
+import com.sano.sano.services.AuditLogService;
 import com.sano.sano.services.OficioService;
 import com.sano.sano.services.UsuarioService;
 
@@ -37,6 +38,7 @@ public class OficioApiController {
 
     private final OficioService oficioService;
     private final UsuarioService usuarioService;
+    private final AuditLogService auditLogService;
 
     @GetMapping
     public PageResultDto<OficioDto> buscar(
@@ -48,14 +50,20 @@ public class OficioApiController {
     }
 
     @PostMapping
-    public void guardar(@Valid @RequestBody OficioSaveDto oficioSaveDto) {
+    public void guardar(@Valid @RequestBody OficioSaveDto oficioSaveDto,
+                        Authentication authentication) {
         oficioService.saveOficio(oficioSaveDto);
+        auditLogService.registrar(authentication.getName(), "CREAR", "OFICIO",
+                "Oficio creado para: " + oficioSaveDto.getNombres() + " " + oficioSaveDto.getPaterno());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OficioDto> actualizar(@PathVariable String id,
-                                                @Valid @RequestBody OficioUpdateDto dto) {
+                                                @Valid @RequestBody OficioUpdateDto dto,
+                                                Authentication authentication) {
         OficioDto updated = oficioService.updateOficio(id, dto);
+        auditLogService.registrar(authentication.getName(), "EDITAR", "OFICIO",
+                "Oficio editado: " + updated.getNombres() + " " + updated.getPaterno());
         return ResponseEntity.ok(updated);
     }
 
@@ -92,6 +100,8 @@ public class OficioApiController {
         }
 
         oficioService.deleteOficio(id, dto.getMotivoEliminacion());
+        auditLogService.registrar(authentication.getName(), "ELIMINAR", "OFICIO",
+                "Oficio eliminado (ID: " + id + ") — Motivo: " + dto.getMotivoEliminacion());
         return ResponseEntity.ok(Map.of("message", "Oficio eliminado correctamente"));
     }
 

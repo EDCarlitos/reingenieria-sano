@@ -29,7 +29,9 @@
 
       <nav class="sidebar-nav sidebar-nav--sistema">
         <span class="nav-label">Sistema</span>
+        <a th:if="${isAdmin}" th:href="@{/funcionarios}" th:classappend="${active == 'funcionarios'} ? ' active' : ''">Gestión de Funcionarios</a>
         <a th:if="${isAdmin}" th:href="@{/usuarios}" th:classappend="${active == 'usuarios'} ? ' active' : ''">Gestión de Usuarios</a>
+        <a th:if="${isAdmin}" th:href="@{/logs}" th:classappend="${active == 'logs'} ? ' active' : ''">Logs</a>
         <a th:href="@{/sistema-info}" th:classappend="${active == 'sistema'} ? ' active' : ''">Información del Sistema</a>
       </nav>
 

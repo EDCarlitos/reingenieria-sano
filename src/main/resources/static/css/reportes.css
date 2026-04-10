@@ -1,0 +1,254 @@
+/* ============================================================
+   REPORTES PAGE — Styles
+   Uses design tokens from variables.css (loaded via layout.html)
+   ============================================================ */
+
+/* ── Hero ── */
+.rpt-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.rpt-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rpt-hero-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary-bg);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rpt-hero h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    line-height: 1.2;
+}
+
+.rpt-hero p {
+    font-size: 13px;
+    color: var(--color-text-light);
+    margin-top: 2px;
+}
+
+/* ── Filter Card ── */
+.rpt-filter-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.rpt-filter-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+
+.rpt-filter-hint {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--color-text-lighter);
+}
+
+.rpt-filter-body {
+    padding: 20px;
+}
+
+.rpt-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.rpt-row:last-child {
+    margin-bottom: 0;
+}
+
+.rpt-three > .rpt-fg {
+    flex: 1;
+}
+
+.rpt-fg label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+}
+
+.rpt-fg input,
+.rpt-fg select {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-family: var(--font-family);
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+}
+
+.rpt-fg input:focus,
+.rpt-fg select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.rpt-fg input::placeholder {
+    color: var(--color-text-pale);
+}
+
+.rpt-fg-empty {
+    visibility: hidden;
+}
+
+/* ── Download Buttons ── */
+.rpt-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rpt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    box-shadow: var(--shadow-button);
+    font-family: var(--font-family);
+}
+
+.rpt-btn:hover {
+    transform: translateY(-1px);
+}
+
+.rpt-btn:active {
+    transform: translateY(0);
+}
+
+.rpt-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.rpt-btn--pdf {
+    background: #dc2626;
+    color: #fff;
+}
+
+.rpt-btn--pdf:hover {
+    background: #b91c1c;
+}
+
+.rpt-btn--excel {
+    background: #16a34a;
+    color: #fff;
+}
+
+.rpt-btn--excel:hover {
+    background: #15803d;
+}
+
+.rpt-btn--clear {
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+    padding: 12px 20px;
+    font-size: 13px;
+}
+
+.rpt-btn--clear:hover {
+    background: var(--color-surface-alt);
+    border-color: var(--color-border-light);
+}
+
+/* ── Spinner ── */
+.rpt-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: rpt-spin 0.6s linear infinite;
+}
+
+@keyframes rpt-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Toast ── */
+.rpt-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 3000;
+    background: var(--sidebar-bg);
+    color: #e2e8f0;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 6px 24px rgba(2, 6, 23, 0.2);
+    transform: translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s;
+}
+
+.rpt-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.rpt-toast--error {
+    background: var(--color-danger);
+    color: #fff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .rpt-row {
+        flex-direction: column;
+    }
+    .rpt-actions {
+        flex-direction: column;
+    }
+    .rpt-fg-empty {
+        display: none;
+    }
+}

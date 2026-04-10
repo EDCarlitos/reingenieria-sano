@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Reportes'">Reportes</title>
+    <link rel="stylesheet" th:href="@{/css/reportes.css}">
+</head>
+<body>
+<div th:replace="layout :: layout(${pageTitle}, ${active})">
+
+    <div th:fragment="content">
+
+        <!-- PAGE HERO -->
+        <div class="rpt-hero">
+            <div class="rpt-hero-left">
+                <div class="rpt-hero-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                </div>
+                <div>
+                    <h2>Generar Reportes</h2>
+                    <p>Descarga oficios en formato PDF o Excel, con filtros opcionales</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTER CARD -->
+        <div class="rpt-filter-card">
+            <div class="rpt-filter-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                <span>Filtros del reporte</span>
+                <span class="rpt-filter-hint">(Opcional — deja vacío para incluir todos los oficios)</span>
+            </div>
+
+            <form id="rptForm" class="rpt-filter-body">
+                <div class="rpt-row rpt-three">
+                    <div class="rpt-fg">
+                        <label for="rf-paterno">Apellido Paterno</label>
+                        <input id="rf-paterno" name="paterno" type="text" placeholder="Ej. García" autocomplete="off">
+                    </div>
+                    <div class="rpt-fg">
+                        <label for="rf-materno">Apellido Materno</label>
+                        <input id="rf-materno" name="materno" type="text" placeholder="Ej. López" autocomplete="off">
+                    </div>
+                    <div class="rpt-fg">
+                        <label for="rf-nombres">Nombre(s)</label>
+                        <input id="rf-nombres" name="nombres" type="text" placeholder="Ej. Juan Carlos" autocomplete="off">
+                    </div>
+                </div>
+                <div class="rpt-row rpt-three">
+                    <div class="rpt-fg">
+                        <label for="rf-asunto">Asunto</label>
+                        <input id="rf-asunto" name="asunto" type="text" placeholder="Palabras del asunto" autocomplete="off">
+                    </div>
+                    <div class="rpt-fg">
+                        <label for="rf-funcionario">Funcionario</label>
+                        <select id="rf-funcionario" name="funcionarioNombre">
+                            <option value="">Todos</option>
+                            <option th:each="f : ${funcionarios}"
+                                    th:value="${f.nombre}"
+                                    th:text="${f.nombre} + ' (' + ${f.puesto} + ')'">
+                                Funcionario
+                            </option>
+                        </select>
+                    </div>
+                    <div class="rpt-fg">
+                        <label for="rf-tipo">Tipo de Oficio</label>
+                        <select id="rf-tipo" name="esRespuesta">
+                            <option value="">Todos</option>
+                            <option value="true">En contestación</option>
+                            <option value="false">Original</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="rpt-row rpt-three">
+                    <div class="rpt-fg">
+                        <label for="rf-fechaDesde">Fecha desde</label>
+                        <input id="rf-fechaDesde" name="fechaDesde" type="date">
+                    </div>
+                    <div class="rpt-fg">
+                        <label for="rf-fechaHasta">Fecha hasta</label>
+                        <input id="rf-fechaHasta" name="fechaHasta" type="date">
+                    </div>
+                    <div class="rpt-fg rpt-fg-empty"></div>
+                </div>
+            </form>
+        </div>
+
+        <!-- DOWNLOAD BUTTONS -->
+        <div class="rpt-actions">
+            <button type="button" class="rpt-btn rpt-btn--pdf" id="btnPdf">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+                Descargar PDF
+            </button>
+            <button type="button" class="rpt-btn rpt-btn--excel" id="btnExcel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+                Descargar Excel
+            </button>
+            <button type="button" class="rpt-btn rpt-btn--clear" id="btnClear">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                Limpiar filtros
+            </button>
+        </div>
+
+        <!-- TOAST -->
+        <div class="rpt-toast" id="toast"></div>
+
+        <script th:src="@{/js/reportes.js}"></script>
+    </div>
+
+</div>
+</body>
+</html>

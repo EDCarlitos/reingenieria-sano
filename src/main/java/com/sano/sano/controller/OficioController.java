@@ -7,10 +7,12 @@ import java.util.Locale;
 
 import com.sano.sano.dto.OficioSaveDto;
 import com.sano.sano.models.Funcionario;
+import com.sano.sano.services.AuditLogService;
 import com.sano.sano.services.FuncionarioService;
 import com.sano.sano.services.OficioService;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import lombok.AllArgsConstructor;
 
@@ -31,6 +33,7 @@ public class OficioController {
 
     private final FuncionarioService funcionarioService;
     private final OficioService oficioService;
+    private final AuditLogService auditLogService;
 
     @GetMapping
     public String asignarNumero(Model model) {
@@ -41,7 +44,8 @@ public class OficioController {
 
     @PostMapping
     public String guardarOficio(@Valid @ModelAttribute OficioSaveDto oficioSaveDto,
-                                BindingResult bindingResult, Model model) {
+                                BindingResult bindingResult, Model model,
+                                Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
             populateAsignarModel(model);
@@ -49,6 +53,8 @@ public class OficioController {
         }
 
         oficioService.saveOficio(oficioSaveDto);
+        auditLogService.registrar(authentication.getName(), "CREAR", "OFICIO",
+                "Oficio creado para: " + oficioSaveDto.getNombres() + " " + oficioSaveDto.getPaterno());
         return "redirect:/";
     }
 
@@ -60,7 +66,7 @@ public class OficioController {
 
         List<Funcionario> funcionarios;
         try {
-            funcionarios = funcionarioService.getAllFuncionarios();
+            funcionarios = funcionarioService.getActiveFuncionarios();
         } catch (Exception ex) {
             funcionarios = List.of();
         }

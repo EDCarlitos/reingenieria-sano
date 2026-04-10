@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sano.sano.models.Usuario;
+import com.sano.sano.services.AuditLogService;
 import com.sano.sano.services.UsuarioService;
 
 @Controller
@@ -25,9 +27,11 @@ import com.sano.sano.services.UsuarioService;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final AuditLogService auditLogService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, AuditLogService auditLogService) {
         this.usuarioService = usuarioService;
+        this.auditLogService = auditLogService;
     }
 
     @GetMapping
@@ -60,7 +64,7 @@ public class UsuarioController {
 
     @PostMapping("/api")
     @ResponseBody
-    public ResponseEntity<?> create(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> create(@RequestBody Map<String, String> body, Authentication authentication) {
         try {
             String username = body.getOrDefault("username", "").trim();
             String password = body.getOrDefault("password", "").trim();
@@ -77,6 +81,8 @@ public class UsuarioController {
             }
 
             Usuario created = usuarioService.create(username, password, rol);
+            auditLogService.registrar(authentication.getName(), "CREAR", "USUARIO",
+                    "Usuario creado: " + username + " (" + rol + ")");
             created.setPassword(null);
             return ResponseEntity.ok(created);
         } catch (IllegalArgumentException e) {
@@ -86,7 +92,7 @@ public class UsuarioController {
 
     @PutMapping("/api/{id}")
     @ResponseBody
-    public ResponseEntity<?> update(@PathVariable String id, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody Map<String, String> body, Authentication authentication) {
         try {
             String username = body.getOrDefault("username", "").trim();
             String password = body.get("password");
@@ -103,6 +109,8 @@ public class UsuarioController {
             }
 
             Usuario updated = usuarioService.update(id, username, password, rol);
+            auditLogService.registrar(authentication.getName(), "EDITAR", "USUARIO",
+                    "Usuario editado: " + username + " (" + rol + ")");
             updated.setPassword(null);
             return ResponseEntity.ok(updated);
         } catch (IllegalArgumentException e) {
@@ -112,9 +120,18 @@ public class UsuarioController {
 
     @PatchMapping("/api/{id}/toggle")
     @ResponseBody
-    public ResponseEntity<?> toggleActivo(@PathVariable String id) {
+    public ResponseEntity<?> toggleActivo(@PathVariable String id, Authentication authentication) {
         try {
+            // Prevent users from toggling their own account
+            Usuario target = usuarioService.findById(id);
+            if (target.getUsername().equals(authentication.getName())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "No puedes cambiar el estado de tu propia cuenta"));
+            }
             usuarioService.toggleActivo(id);
+            String estado = target.isActivo() ? "desactivado" : "reactivado";
+            auditLogService.registrar(authentication.getName(), "EDITAR", "USUARIO",
+                    "Usuario " + estado + ": " + target.getUsername());
             return ResponseEntity.ok(Map.of("ok", true));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

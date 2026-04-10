@@ -28,7 +28,7 @@ public class DashboardController {
 
         List<Funcionario> funcionarios;
         try {
-            funcionarios = funcionarioService.getAllFuncionarios();
+            funcionarios = funcionarioService.getActiveFuncionarios();
         } catch (Exception ex) {
             funcionarios = List.of();
         }
