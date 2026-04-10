@@ -3,9 +3,9 @@
     <div id="sidebarOverlay" class="sidebar-overlay" tabindex="-1"></div>
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo-area">
+        <a href="/" class="logo-area">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6v4hPPDO9V4BR5Ck-aDigPDL2WqFRpkUIWA&amp;s" alt="Logo empresa">
-        </div>
+        </a>
         <div class="company-name">Sano</div>
         <div class="company-sub">Sistema de Oficios</div>
         <button id="sidebarClose" class="sidebar-close" aria-label="Cerrar menú">✕</button>
@@ -17,6 +17,11 @@
         <a th:href="@{/buscar-oficio}" th:classappend="${active == 'buscar'} ? ' active' : ''">Buscar Oficio</a>
         <a th:href="@{/cancelar-oficio}" th:classappend="${active == 'cancelar'} ? ' active' : ''">Cancelar Oficio</a>
         <a th:href="@{/generar-reportes}" th:classappend="${active == 'reportes'} ? ' active' : ''">Generar Reportes</a>
+      </nav>
+
+      <nav class="sidebar-nav sidebar-nav--sistema">
+        <span class="nav-label">Sistema</span>
+        <a th:href="@{/sistema-info}" th:classappend="${active == 'sistema'} ? ' active' : ''">Información del Sistema</a>
       </nav>
 
       <div class="sidebar-footer">

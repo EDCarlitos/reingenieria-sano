@@ -20,10 +20,10 @@
                 </thead>
                 <tbody>
                     <tr th:each="oficio : ${oficios}">
-                        <td><span class="oficio-badge" th:text="${oficio.numeroOficio}">0001</span></td>
-                        <td th:text="${oficio.apellidoPaterno}">García</td>
-                        <td th:text="${oficio.nombre}">Juan</td>
-                        <td th:text="${oficio.empleado}">Admin</td>
+                        <td><span class="oficio-badge" th:text="${oficio.id}">0001</span></td>
+                        <td th:text="${oficio.paterno}">García</td>
+                        <td th:text="${oficio.nombres}">Juan</td>
+                        <td th:text="${oficio.funcionario != null ? oficio.funcionario.nombre : ''}">Admin</td>
                         <td th:text="${oficio.fecha}">01/04/2026</td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(oficios)}">
