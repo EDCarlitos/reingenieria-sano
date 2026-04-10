@@ -1,0 +1,40 @@
+<div th:fragment="modalEliminar" id="modalEliminar" class="modal-overlay">
+    <div class="modal-card modal-card--danger">
+        <div class="modal-header modal-header--danger">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Eliminar Oficio
+            </h3>
+            <button type="button" class="modal-close" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="delete-warning">
+                <p>Estás a punto de eliminar el oficio <strong id="deleteOficioNum"></strong></p>
+                <p class="delete-warning-name" id="deleteOficioName"></p>
+                <p class="delete-warning-note">Esta acción marcará el registro como eliminado.</p>
+            </div>
+            <form id="formEliminar">
+                <input type="hidden" id="deleteOficioId">
+                <div class="form-group">
+                    <label for="deleteMotivo">Motivo de eliminación *</label>
+                    <textarea id="deleteMotivo" required placeholder="Describa el motivo de la eliminación..." rows="3"></textarea>
+                </div>
+                <div id="adminUsernameGroup" class="form-group" style="display:none">
+                    <label for="deleteAdminUsername">Usuario administrador *</label>
+                    <input type="text" id="deleteAdminUsername" placeholder="Nombre de usuario del administrador" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="deletePassword" id="deletePasswordLabel">Contraseña *</label>
+                    <input type="password" id="deletePassword" required placeholder="Ingrese contraseña" autocomplete="off">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel modal-close-btn">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        Confirmar Eliminación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

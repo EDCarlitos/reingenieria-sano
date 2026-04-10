@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.sano.sano.dto.OficioDto;
 import com.sano.sano.dto.OficioFilterDto;
 import com.sano.sano.dto.OficioSaveDto;
+import com.sano.sano.dto.OficioUpdateDto;
 import com.sano.sano.dto.PageResultDto;
 import com.sano.sano.models.Funcionario;
 import com.sano.sano.models.Oficio;
@@ -36,27 +37,60 @@ public class OficioServiceImp implements OficioService {
 
     @Override
     public void saveOficio(OficioSaveDto oficioSaveDto) {
-
         Funcionario funcionario = funcionarioRepository.findById(oficioSaveDto.getFuncionarioId()).orElse(null);
 
-        Oficio oficio = new Oficio(null,
-                oficioSaveDto.getPaterno(),
-                oficioSaveDto.getMaterno(),
-                oficioSaveDto.getNombres(),
-                oficioSaveDto.getContesta(),
-                oficioSaveDto.isEsRespuesta(),
-                oficioSaveDto.getAsunto(),
-                oficioSaveDto.getObservacion(),
-                funcionario,
-                LocalDate.now(),
-                LocalTime.now().toString());
+        Oficio oficio = new Oficio();
+        oficio.setPaterno(oficioSaveDto.getPaterno());
+        oficio.setMaterno(oficioSaveDto.getMaterno());
+        oficio.setNombres(oficioSaveDto.getNombres());
+        oficio.setContesta(oficioSaveDto.getContesta());
+        oficio.setEsRespuesta(oficioSaveDto.isEsRespuesta());
+        oficio.setAsunto(oficioSaveDto.getAsunto());
+        oficio.setObservacion(oficioSaveDto.getObservacion());
+        oficio.setFuncionario(funcionario);
+        oficio.setFecha(LocalDate.now());
+        oficio.setHora(LocalTime.now().toString());
 
+        oficioRepository.save(oficio);
+    }
+
+    @Override
+    public OficioDto updateOficio(String id, OficioUpdateDto dto) {
+        Oficio oficio = oficioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Oficio no encontrado"));
+
+        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId()).orElse(null);
+
+        oficio.setPaterno(dto.getPaterno());
+        oficio.setMaterno(dto.getMaterno());
+        oficio.setNombres(dto.getNombres());
+        oficio.setContesta(dto.getContesta());
+        oficio.setEsRespuesta(dto.isEsRespuesta());
+        oficio.setAsunto(dto.getAsunto());
+        oficio.setObservacion(dto.getObservacion());
+        oficio.setFuncionario(funcionario);
+
+        oficio = oficioRepository.save(oficio);
+        return mapToDto(oficio);
+    }
+
+    @Override
+    public void deleteOficio(String id, String motivoEliminacion) {
+        Oficio oficio = oficioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Oficio no encontrado"));
+
+        oficio.setEliminado(true);
+        oficio.setMotivoEliminacion(motivoEliminacion);
+        oficio.setFechaEliminacion(LocalDate.now());
         oficioRepository.save(oficio);
     }
 
     @Override
     public PageResultDto<OficioDto> getOficiosFiltrados(OficioFilterDto filter, int page, int size) {
         List<Criteria> criterias = new ArrayList<>();
+
+        // Excluir registros eliminados
+        criterias.add(Criteria.where("eliminado").ne(true));
 
         if (StringUtils.hasText(filter.getPaterno())) {
             criterias.add(Criteria.where("paterno").regex(filter.getPaterno(), "i"));
@@ -96,18 +130,7 @@ public class OficioServiceImp implements OficioService {
         List<Oficio> oficios = mongoTemplate.find(query, Oficio.class);
 
         List<OficioDto> content = oficios.stream()
-                .map(o -> new OficioDto(
-                        o.getId(),
-                        o.getPaterno(),
-                        o.getMaterno(),
-                        o.getNombres(),
-                        o.getContesta(),
-                        o.isEsRespuesta(),
-                        o.getAsunto(),
-                        o.getObservacion(),
-                        o.getFuncionario(),
-                        o.getFecha(),
-                        o.getHora()))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
 
         int totalPages = (int) Math.ceil((double) totalElements / size);
@@ -120,5 +143,24 @@ public class OficioServiceImp implements OficioService {
                 size,
                 page < totalPages - 1,
                 page > 0);
+    }
+
+    private OficioDto mapToDto(Oficio o) {
+        OficioDto dto = new OficioDto();
+        dto.setId(o.getId());
+        dto.setPaterno(o.getPaterno());
+        dto.setMaterno(o.getMaterno());
+        dto.setNombres(o.getNombres());
+        dto.setContesta(o.getContesta());
+        dto.setEsRespuesta(o.isEsRespuesta());
+        dto.setAsunto(o.getAsunto());
+        dto.setObservacion(o.getObservacion());
+        dto.setFuncionario(o.getFuncionario());
+        dto.setFecha(o.getFecha());
+        dto.setHora(o.getHora());
+        dto.setEliminado(o.isEliminado());
+        dto.setMotivoEliminacion(o.getMotivoEliminacion());
+        dto.setFechaEliminacion(o.getFechaEliminacion());
+        return dto;
     }
 }

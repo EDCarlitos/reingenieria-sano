@@ -1,6 +1,5 @@
 /* ============================================================
-   BUSCAR OFICIO — Refined search page
-   Font: DM Sans (loaded via Google Fonts in the template)
+   INDEX PAGE — Search, Filter, Results, Actions, Modals, Toast
    ============================================================ */
 
 /* ── Search Hero ── */
@@ -247,8 +246,6 @@
     border-top: 1px solid var(--color-border-light);
 }
 
-/* .btn-primary and .btn-outline are defined in dashboard.css */
-
 /* ── Chips ── */
 .chips-bar {
     display: flex;
@@ -344,9 +341,7 @@
     color: var(--color-text-light);
 }
 
-/* .spinner and @keyframes spin are defined in dashboard.css */
-
-/* ── Table ── */
+/* ── Results Table ── */
 .rp-table-wrap {
     overflow-x: auto;
 }
@@ -372,7 +367,7 @@
 
 .rp-table-wrap tbody tr {
     border-bottom: 1px solid var(--color-border-row);
-    transition: background 0.12s;
+    transition: background 0.12s, opacity 0.3s ease, transform 0.3s ease;
     animation: rowIn 0.25s ease both;
 }
 
@@ -393,7 +388,6 @@
     white-space: nowrap;
 }
 
-/* .oficio-badge base defined in dashboard.css — page-specific override: */
 .rp-table-wrap .oficio-badge {
     max-width: 100px;
     overflow: hidden;
@@ -525,6 +519,298 @@
     font-size: 13px;
 }
 
+/* ── Action Buttons ── */
+.actions-cell {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.th-actions {
+    text-align: center;
+    width: 110px;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-button);
+}
+
+.btn-edit:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary-border);
+    background: var(--color-primary-bg);
+}
+
+.btn-delete:hover {
+    color: var(--color-danger);
+    border-color: #fecaca;
+    background: #fef2f2;
+}
+
+/* ── Modal Overlay ── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.modal--active {
+    opacity: 1;
+}
+
+/* ── Modal Card ── */
+.modal-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s ease;
+}
+
+.modal--active .modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.modal-card--danger {
+    border-top: 3px solid var(--color-danger);
+}
+
+/* ── Modal Header ── */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    display: flex;
+    align-items: center;
+}
+
+.modal-header--danger {
+    background: #fef2f2;
+    border-bottom-color: #fecaca;
+}
+
+.modal-header--danger h3 {
+    color: #991b1b;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--color-text-light);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    background: var(--color-surface-alt);
+    color: var(--color-text-dark);
+}
+
+/* ── Modal Body ── */
+.modal-body {
+    padding: 24px;
+}
+
+/* ── Modal Footer ── */
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+    margin-top: 20px;
+}
+
+/* ── Form Elements ── */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-family: var(--font-family);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.form-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.form-check label {
+    font-size: 13px;
+    color: var(--color-text-mid);
+    cursor: pointer;
+}
+
+/* ── Buttons ── */
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+    font-family: var(--font-family);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-dark);
+    box-shadow: var(--shadow-button);
+}
+
+.btn-danger {
+    background: var(--color-danger);
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+.btn-cancel {
+    background: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+.btn-cancel:hover {
+    background: var(--color-border);
+    color: var(--color-text-mid);
+}
+
+/* ── Delete Warning ── */
+.delete-warning {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    margin-bottom: 20px;
+}
+
+.delete-warning p {
+    font-size: 13.5px;
+    color: #991b1b;
+    line-height: 1.5;
+}
+
+.delete-warning strong {
+    font-weight: 700;
+}
+
+.delete-warning-name {
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.delete-warning-note {
+    font-size: 12px !important;
+    color: #b91c1c !important;
+    margin-top: 8px;
+    opacity: 0.75;
+}
+
 /* ── Responsive ── */
 @media (max-width: 960px) {
     .fg-three { grid-template-columns: repeat(2, 1fr); }
@@ -549,4 +835,60 @@
 
     .search-hero-inner { flex-direction: column; text-align: center; }
     .search-hero { padding: 22px 20px; }
+}
+
+/* ── Toast Notification ── */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 14px 22px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 3000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-family);
+    max-width: 360px;
+    line-height: 1.4;
+}
+
+.toast--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast--success {
+    background: #065f46;
+    color: #d1fae5;
+    border: 1px solid #10b981;
+}
+
+.toast--error {
+    background: #991b1b;
+    color: #fecaca;
+    border: 1px solid #ef4444;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .modal-card {
+        max-width: 100%;
+        margin: 10px;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .th-actions {
+        width: 90px;
+    }
+    .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        max-width: none;
+    }
 }

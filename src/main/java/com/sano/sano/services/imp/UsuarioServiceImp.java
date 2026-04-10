@@ -69,4 +69,19 @@ public class UsuarioServiceImp implements UsuarioService {
         usuario.setActivo(!usuario.isActivo());
         usuarioRepository.save(usuario);
     }
+
+    @Override
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public boolean verifyCredentials(String username, String rawPassword) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        if (!usuario.isActivo()) {
+            throw new IllegalArgumentException("Usuario desactivado");
+        }
+        return passwordEncoder.matches(rawPassword, usuario.getPassword());
+    }
 }

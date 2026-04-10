@@ -1,0 +1,58 @@
+<div th:fragment="modalEditar" id="modalEditar" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;opacity:.7"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Editar Oficio
+            </h3>
+            <button type="button" class="modal-close" aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="formEditar" class="modal-body">
+            <input type="hidden" id="editOficioId">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editPaterno">Apellido Paterno</label>
+                    <input type="text" id="editPaterno" required>
+                </div>
+                <div class="form-group">
+                    <label for="editMaterno">Apellido Materno</label>
+                    <input type="text" id="editMaterno" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editNombres">Nombres</label>
+                <input type="text" id="editNombres" required>
+            </div>
+            <div class="form-group">
+                <label for="editContesta">Contesta</label>
+                <input type="text" id="editContesta" required>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="editEsRespuesta">
+                <label for="editEsRespuesta">Es Respuesta</label>
+            </div>
+            <div class="form-group">
+                <label for="editAsunto">Asunto</label>
+                <input type="text" id="editAsunto" required>
+            </div>
+            <div class="form-group">
+                <label for="editObservacion">Observación</label>
+                <textarea id="editObservacion" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="editFuncionarioId">Funcionario</label>
+                <select id="editFuncionarioId" required>
+                    <option value="">— Seleccione —</option>
+                    <option th:each="func : ${funcionarios}" th:value="${func.id}" th:text="${func.nombre}">Funcionario</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-cancel modal-close-btn">Cancelar</button>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

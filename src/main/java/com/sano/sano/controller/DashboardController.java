@@ -9,18 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.sano.sano.dto.OficioDto;
-import com.sano.sano.dto.OficioFilterDto;
-import com.sano.sano.dto.PageResultDto;
-import com.sano.sano.services.OficioService;
+import com.sano.sano.models.Funcionario;
+import com.sano.sano.services.FuncionarioService;
 
 @Controller
 public class DashboardController {
 
-    private final OficioService oficioService;
+    private final FuncionarioService funcionarioService;
 
-    public DashboardController(OficioService oficioService) {
-        this.oficioService = oficioService;
+    public DashboardController(FuncionarioService funcionarioService) {
+        this.funcionarioService = funcionarioService;
     }
 
     @GetMapping("/")
@@ -28,13 +26,16 @@ public class DashboardController {
         model.addAttribute("fecha", LocalDate.now()
                 .format(DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new java.util.Locale("es"))));
 
-        // Obtener los últimos 10 oficios (sin filtros, página 0, size 20)
-        PageResultDto<OficioDto> page = oficioService.getOficiosFiltrados(new OficioFilterDto(), 0, 20);
-        List<OficioDto> oficios = page.getContent();
-        model.addAttribute("oficios", oficios);
+        List<Funcionario> funcionarios;
+        try {
+            funcionarios = funcionarioService.getAllFuncionarios();
+        } catch (Exception ex) {
+            funcionarios = List.of();
+        }
+        model.addAttribute("funcionarios", funcionarios);
 
-        model.addAttribute("pageTitle", "Dashboard — Sano");
-        model.addAttribute("active", "");
+        model.addAttribute("pageTitle", "Oficios — Sano");
+        model.addAttribute("active", "oficios");
         return "index";
     }
 

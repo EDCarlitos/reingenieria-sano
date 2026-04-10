@@ -25,5 +25,8 @@ public class OficioDto {
     protected Funcionario funcionario;
     protected LocalDate fecha;
     protected String hora;
+    protected boolean eliminado;
+    protected String motivoEliminacion;
+    protected LocalDate fechaEliminacion;
 
 }

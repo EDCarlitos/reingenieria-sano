@@ -2,41 +2,148 @@
 
     <div th:fragment="content">
 
-        <div class="section-header">
-            <h3>Lista de Oficios</h3>
-            <span class="record-count" th:text="${#lists.size(oficios)} + ' registros'">0 registros</span>
+        <!-- Search Hero -->
+        <div class="search-hero">
+            <div class="search-hero-inner">
+                <div class="hero-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <div class="hero-text">
+                    <h2>Oficios</h2>
+                    <p>Consulta, filtra y administra los oficios registrados en el sistema</p>
+                </div>
+            </div>
         </div>
 
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>N° Oficio</th>
-                        <th>Apellido Paterno</th>
-                        <th>Nombre</th>
-                        <th>Empleado (Atendió)</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="oficio : ${oficios}">
-                        <td><span class="oficio-badge" th:text="${oficio.id}">0001</span></td>
-                        <td th:text="${oficio.paterno}">García</td>
-                        <td th:text="${oficio.nombres}">Juan</td>
-                        <td th:text="${oficio.funcionario != null ? oficio.funcionario.nombre : ''}">Admin</td>
-                        <td th:text="${oficio.fecha}">01/04/2026</td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(oficios)}">
-                        <td colspan="5">
-                            <div class="empty-state">
-                                <div class="empty-title">Sin registros</div>
-                                <p>No hay oficios registrados aún.</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Filter Card -->
+        <div class="filter-card" id="filterCard">
+            <div class="filter-card-header" id="filterCardHeader">
+                <div class="fch-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    <span>Filtros</span>
+                    <span class="filter-count" id="filterCount" style="display:none">0</span>
+                </div>
+                <button type="button" class="fch-toggle" id="filterToggle" aria-label="Expandir / colapsar filtros">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+            </div>
+            <div class="filter-card-body" id="filterCardBody">
+                <div class="fg-row fg-three">
+                    <div class="fg">
+                        <label for="f-paterno">Apellido Paterno</label>
+                        <input id="f-paterno" type="text" placeholder="Ej. García" autocomplete="off">
+                    </div>
+                    <div class="fg">
+                        <label for="f-materno">Apellido Materno</label>
+                        <input id="f-materno" type="text" placeholder="Ej. López" autocomplete="off">
+                    </div>
+                    <div class="fg">
+                        <label for="f-nombres">Nombre(s)</label>
+                        <input id="f-nombres" type="text" placeholder="Ej. Juan Carlos" autocomplete="off">
+                    </div>
+                </div>
+                <div class="fg-row fg-three">
+                    <div class="fg">
+                        <label for="f-asunto">Asunto</label>
+                        <input id="f-asunto" type="text" placeholder="Palabras del asunto" autocomplete="off">
+                    </div>
+                    <div class="fg">
+                        <label for="f-funcionario">Funcionario (atendió)</label>
+                        <select id="f-funcionario" name="f-funcionario">
+                            <option value="">Todos</option>
+                            <option th:each="f : ${funcionarios}"
+                                    th:value="${f.nombre}"
+                                    th:text="${f.nombre} + ' (' + ${f.puesto} + ')'">
+                                Funcionario
+                            </option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label for="f-tipo">Tipo de Oficio</label>
+                        <select id="f-tipo">
+                            <option value="">Todos</option>
+                            <option value="true">En contestación</option>
+                            <option value="false">Original</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fg-row fg-three">
+                    <div class="fg">
+                        <label for="f-fechaDesde">Fecha desde</label>
+                        <input id="f-fechaDesde" type="date">
+                    </div>
+                    <div class="fg">
+                        <label for="f-fechaHasta">Fecha hasta</label>
+                        <input id="f-fechaHasta" type="date">
+                    </div>
+                    <div class="fg fg-empty"></div>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn-outline" id="btnClear">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        Limpiar
+                    </button>
+                    <button type="button" class="btn-primary" id="btnSearch">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- Active Chips -->
+        <div class="chips-bar" id="chipsBar" style="display:none">
+            <span class="chips-label">Filtros activos</span>
+            <div class="chips-list" id="chipsList"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-panel" id="resultsPanel">
+            <div class="rp-header">
+                <h3>Resultados</h3>
+                <span class="rp-count" id="rpCount">0 registros</span>
+            </div>
+            <div class="rp-loading" id="rpLoading" style="display:none">
+                <div class="spinner"></div>
+                <span>Buscando oficios…</span>
+            </div>
+            <div class="rp-table-wrap" id="rpTableWrap" style="display:none">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N° / ID</th>
+                            <th>Solicitante</th>
+                            <th>Asunto</th>
+                            <th>Funcionario</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th class="th-actions">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rpTbody"></tbody>
+                </table>
+            </div>
+            <div class="rp-empty" id="rpEmpty">
+                <div class="rp-empty-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12h4"/></svg>
+                </div>
+                <p class="rp-empty-title">Sin resultados</p>
+                <p class="rp-empty-sub">Usa los filtros superiores para buscar oficios</p>
+            </div>
+            <div class="rp-pagination" id="rpPagination" style="display:none">
+                <span class="rp-pag-info" id="rpPagInfo"></span>
+                <div class="rp-pag-controls" id="rpPagControls"></div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div th:replace="~{fragments/modal-editar-oficio :: modalEditar}"></div>
+        <div th:replace="~{fragments/modal-eliminar-oficio :: modalEliminar}"></div>
+
+        <!-- Page data for JavaScript -->
+        <script th:inline="javascript">
+            window.IS_ADMIN = /*[[${isAdmin}]]*/ false;
+        </script>
 
     </div>
 
