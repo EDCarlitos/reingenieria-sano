@@ -26,6 +26,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
+        if (!usuario.isActivo()) {
+            throw new UsernameNotFoundException("Usuario desactivado: " + username);
+        }
+
         return new User(
                 usuario.getUsername(),
                 usuario.getPassword(),

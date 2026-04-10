@@ -15,10 +15,12 @@ public class DataSeeder {
     CommandLineRunner seedUsuarios(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (usuarioRepository.findByUsername("admin").isEmpty()) {
-                usuarioRepository.save(new Usuario(null, "admin", passwordEncoder.encode("admin123"), "ADMIN"));
+                Usuario admin = new Usuario(null, "admin", passwordEncoder.encode("admin123"), "ADMIN", true);
+                usuarioRepository.save(admin);
             }
             if (usuarioRepository.findByUsername("empleado").isEmpty()) {
-                usuarioRepository.save(new Usuario(null, "empleado", passwordEncoder.encode("empleado123"), "EMPLEADO"));
+                Usuario empleado = new Usuario(null, "empleado", passwordEncoder.encode("empleado123"), "EMPLEADO", true);
+                usuarioRepository.save(empleado);
             }
         };
     }

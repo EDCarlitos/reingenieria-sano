@@ -192,6 +192,35 @@ body {
     border-left-color: var(--color-danger);
 }
 
+.sidebar-logout-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    padding: 10px 14px;
+    width: 100%;
+    text-align: left;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+    border-left: 3px solid transparent;
+}
+.sidebar-logout-btn.danger {
+    color: var(--color-danger);
+}
+.sidebar-logout-btn.danger.active,
+.sidebar-logout-btn.danger:focus {
+    background: var(--sidebar-active-bg);
+    color: var(--color-danger-light);
+    border-left-color: var(--color-danger);
+    font-weight: 600;
+}
+.sidebar-logout-btn:hover {
+    background: var(--sidebar-border);
+    color: var(--color-danger-light);
+    border-left-color: var(--color-danger);
+}
+
 .sidebar-footer {
     padding: 10px 10px 18px;
     border-top: 1px solid var(--sidebar-border);

@@ -30,13 +30,16 @@
 
       <nav class="sidebar-nav sidebar-nav--sistema">
         <span class="nav-label">Sistema</span>
+        <a th:if="${isAdmin}" th:href="@{/usuarios}" th:classappend="${active == 'usuarios'} ? ' active' : ''">Gestión de Usuarios</a>
         <a th:href="@{/sistema-info}" th:classappend="${active == 'sistema'} ? ' active' : ''">Información del Sistema</a>
       </nav>
 
       <div class="sidebar-footer">
-        <nav class="sidebar-nav">
-          <a th:href="@{/logout}" th:classappend="${active == 'salir'} ? ' danger active' : ' danger'">Salir / Cerrar Sesión</a>
-        </nav>
+          <nav class="sidebar-nav">
+            <form th:action="@{/logout}" method="post" style="margin:0;padding:0;">
+              <button type="submit" class="sidebar-logout-btn" th:classappend="${active == 'salir'} ? ' danger active' : ' danger'">Salir / Cerrar Sesión</button>
+            </form>
+          </nav>
       </div>
     </aside>
   </div>

@@ -23,4 +23,6 @@ public class Usuario {
     private String password;
 
     private String rol; // ADMIN, EMPLEADO
+
+    private boolean activo = true;
 }
