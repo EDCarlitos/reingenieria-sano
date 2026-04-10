@@ -11,6 +11,15 @@
         <button id="sidebarClose" class="sidebar-close" aria-label="Cerrar menú">✕</button>
       </div>
 
+      <!-- User info -->
+      <div class="sidebar-user" th:if="${currentUsername != null}">
+        <div class="sidebar-user-avatar" th:text="${#strings.toUpperCase(#strings.substring(currentUsername, 0, 1))}">U</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" th:text="${currentUsername}">usuario</div>
+          <span class="sidebar-user-role" th:text="${currentRole}" th:classappend="${currentRole == 'ADMIN'} ? ' sidebar-user-role--admin' : ''">ROL</span>
+        </div>
+      </div>
+
       <nav class="sidebar-nav">
         <span class="nav-label">Acciones</span>
         <a th:href="@{/asignar-numero}" th:classappend="${active == 'asignar'} ? ' active' : ''">Asignar Número</a>
