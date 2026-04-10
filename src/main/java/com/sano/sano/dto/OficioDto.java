@@ -1,16 +1,20 @@
 package com.sano.sano.dto;
 
+import java.time.LocalDate;
+
 import com.sano.sano.models.Funcionario;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class OficioDto {
-    
 
+    protected String id;
     protected String paterno;
     protected String materno;
     protected String nombres;
@@ -19,5 +23,7 @@ public class OficioDto {
     protected String asunto;
     protected String observacion;
     protected Funcionario funcionario;
+    protected LocalDate fecha;
+    protected String hora;
 
 }
