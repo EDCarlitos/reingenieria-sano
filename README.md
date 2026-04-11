@@ -440,17 +440,18 @@ src/main/resources/
 
 | Pantalla | Captura |
 |----------|---------|
-| **Login** — Diseño moderno con panel dual, cifrado BCrypt | IMAGEN_login_nuevo |
-| **Dashboard / Home** — Filtros avanzados, tabla paginada, chips de filtros | IMAGEN_dashboard_nuevo |
-| **Asignar Número de Oficio** — Formulario validado con selección de funcionario | IMAGEN_asignar_oficio_nuevo |
-| **Buscar Oficio** — Múltiples filtros simultáneos, paginación, acciones rápidas | IMAGEN_buscar_oficio_nuevo |
-| **Editar Oficio (Modal)** — Edición inline desde resultados de búsqueda | IMAGEN_modal_editar_oficio |
-| **Eliminar Oficio (Modal)** — Eliminación lógica con motivo y contraseña | IMAGEN_modal_eliminar_oficio |
-| **Gestión de Funcionarios** — CRUD completo con estadísticas | IMAGEN_funcionarios_nuevo |
-| **Gestión de Usuarios** — Roles ADMIN/EMPLEADO, activación/desactivación | IMAGEN_usuarios_nuevo |
-| **Reportes** — Filtros y exportación a PDF/Excel | IMAGEN_reportes_nuevo |
-| **Historial de Auditoría (Logs)** — Registro de todas las acciones del sistema | IMAGEN_logs_nuevo |
-| **Información del Sistema** | IMAGEN_sistema_info_nuevo |
+| **Login** — Diseño moderno con panel dual, cifrado BCrypt | ![Login nuevo](imagenes/nuevo_login.jpeg) |
+| **Dashboard / Home (Admin)** — Filtros avanzados, tabla paginada, chips de filtros | ![Dashboard admin](imagenes/nuevo_dashboard_admin.jpeg) |
+| **Dashboard / Home (Empleado)** — Vista limitada según rol | ![Dashboard empleado](imagenes/nuevo_Dashboard_empleado.jpeg) |
+| **Asignar Número de Oficio** — Formulario validado con selección de funcionario | ![Asignar número](imagenes/nuevo_asignar_numero.jpeg) |
+| **Buscar Oficio** — Múltiples filtros simultáneos, paginación, acciones rápidas | ![Buscar oficios](imagenes/nuevo_buscar_oficios.jpeg) |
+| **Editar Oficio (Modal)** — Edición inline desde resultados de búsqueda | ![Editar oficio](imagenes/nuevo_editar_oficio.jpeg) |
+| **Eliminar Oficio (Modal)** — Eliminación lógica con motivo y contraseña | ![Eliminar oficio](imagenes/nuevo_eliminar_oficio.jpeg) |
+| **Gestión de Funcionarios** — CRUD completo con estadísticas | ![Funcionarios](imagenes/nuevo_funcionarios.jpeg) |
+| **Gestión de Usuarios** — Roles ADMIN/EMPLEADO, activación/desactivación | ![Usuarios](imagenes/nuevo_usuarios.jpeg) |
+| **Reportes** — Filtros y exportación a PDF/Excel | ![Reportes](imagenes/nuevo_reportes.jpeg) |
+| **Historial de Auditoría (Logs)** — Registro de todas las acciones del sistema | ![Logs](imagenes/nuevo_logs.jpeg) |
+| **Información del Sistema** | ![Información](imagenes/nuevo_informacion.jpeg) |
 
 ---
 
