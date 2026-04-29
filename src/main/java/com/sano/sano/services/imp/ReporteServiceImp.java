@@ -82,7 +82,8 @@ public class ReporteServiceImp implements ReporteService {
     }
 
     private String formatDate(LocalDate date) {
-        if (date == null) return "—";
+        if (date == null)
+            return "—";
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
@@ -104,7 +105,8 @@ public class ReporteServiceImp implements ReporteService {
 
             // Subtitle
             Font subFont = FontFactory.getFont(FontFactory.HELVETICA, 10, java.awt.Color.GRAY);
-            Paragraph sub = new Paragraph("Generado el " + formatDate(LocalDate.now()) + " — " + oficios.size() + " registro(s)", subFont);
+            Paragraph sub = new Paragraph(
+                    "Generado el " + formatDate(LocalDate.now()) + " — " + oficios.size() + " registro(s)", subFont);
             sub.setAlignment(Element.ALIGN_CENTER);
             sub.setSpacingAfter(15);
             document.add(sub);
@@ -112,12 +114,12 @@ public class ReporteServiceImp implements ReporteService {
             // Table
             PdfPTable table = new PdfPTable(7);
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{1.2f, 2f, 2.5f, 1.8f, 1.2f, 1.2f, 1.5f});
+            table.setWidths(new float[] { 1.2f, 2f, 2.5f, 1.8f, 1.2f, 1.2f, 1.5f });
 
             // Header
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, java.awt.Color.WHITE);
             java.awt.Color headerBg = new java.awt.Color(37, 99, 235);
-            String[] headers = {"N° / ID", "Solicitante", "Asunto", "Funcionario", "Fecha", "Tipo", "Observación"};
+            String[] headers = { "N° / ID", "Solicitante", "Asunto", "Funcionario", "Fecha", "Tipo", "Observación" };
             for (String h : headers) {
                 PdfPCell cell = new PdfPCell(new Phrase(h, headerFont));
                 cell.setBackgroundColor(headerBg);
@@ -135,18 +137,19 @@ public class ReporteServiceImp implements ReporteService {
                 java.awt.Color bg = alt ? altBg : java.awt.Color.WHITE;
                 alt = !alt;
 
-                String solicitante = (nvl(o.getPaterno()) + " " + nvl(o.getMaterno()) + ", " + nvl(o.getNombres())).trim();
+                String solicitante = (nvl(o.getPaterno()) + " " + nvl(o.getMaterno()) + ", " + nvl(o.getNombres()))
+                        .trim();
                 String funcionario = o.getFuncionario() != null ? o.getFuncionario().getNombre() : "—";
                 String tipo = o.isEsRespuesta() ? "En contestación" : "Original";
 
                 String[] values = {
-                    nvl(o.getId()),
-                    solicitante,
-                    nvl(o.getAsunto()),
-                    funcionario,
-                    formatDate(o.getFecha()),
-                    tipo,
-                    nvl(o.getObservacion())
+                        nvl(o.getAnio() + "-" + o.getNumeroOficio()),
+                        solicitante,
+                        nvl(o.getAsunto()),
+                        funcionario,
+                        formatDate(o.getFecha()),
+                        tipo,
+                        nvl(o.getObservacion())
                 };
 
                 for (String v : values) {
@@ -172,7 +175,7 @@ public class ReporteServiceImp implements ReporteService {
         List<Oficio> oficios = getOficiosFiltrados(filter);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             XSSFSheet sheet = workbook.createSheet("Oficios");
 
@@ -198,7 +201,8 @@ public class ReporteServiceImp implements ReporteService {
             subStyle.setAlignment(HorizontalAlignment.CENTER);
 
             XSSFRow subRow = sheet.createRow(1);
-            subRow.createCell(0).setCellValue("Generado el " + formatDate(LocalDate.now()) + " — " + oficios.size() + " registro(s)");
+            subRow.createCell(0).setCellValue(
+                    "Generado el " + formatDate(LocalDate.now()) + " — " + oficios.size() + " registro(s)");
             subRow.getCell(0).setCellStyle(subStyle);
             sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -218,7 +222,7 @@ public class ReporteServiceImp implements ReporteService {
             headerStyle.setBorderLeft(BorderStyle.THIN);
             headerStyle.setBorderRight(BorderStyle.THIN);
 
-            String[] headers = {"N° / ID", "Solicitante", "Asunto", "Funcionario", "Fecha", "Tipo", "Observación"};
+            String[] headers = { "N° / ID", "Solicitante", "Asunto", "Funcionario", "Fecha", "Tipo", "Observación" };
             XSSFRow headerRow = sheet.createRow(3);
             for (int i = 0; i < headers.length; i++) {
                 headerRow.createCell(i).setCellValue(headers[i]);
@@ -237,18 +241,19 @@ public class ReporteServiceImp implements ReporteService {
             for (Oficio o : oficios) {
                 XSSFRow row = sheet.createRow(rowIdx++);
 
-                String solicitante = (nvl(o.getPaterno()) + " " + nvl(o.getMaterno()) + ", " + nvl(o.getNombres())).trim();
+                String solicitante = (nvl(o.getPaterno()) + " " + nvl(o.getMaterno()) + ", " + nvl(o.getNombres()))
+                        .trim();
                 String funcionario = o.getFuncionario() != null ? o.getFuncionario().getNombre() : "—";
                 String tipo = o.isEsRespuesta() ? "En contestación" : "Original";
 
                 String[] values = {
-                    nvl(o.getId()),
-                    solicitante,
-                    nvl(o.getAsunto()),
-                    funcionario,
-                    formatDate(o.getFecha()),
-                    tipo,
-                    nvl(o.getObservacion())
+                        nvl(o.getAnio() + "-" + o.getNumeroOficio()),
+                        solicitante,
+                        nvl(o.getAsunto()),
+                        funcionario,
+                        formatDate(o.getFecha()),
+                        tipo,
+                        nvl(o.getObservacion())
                 };
 
                 for (int i = 0; i < values.length; i++) {

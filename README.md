@@ -38,7 +38,7 @@
       - [10. Historial de cambios (Auditoría)](#10-historial-de-cambios-auditoría)
     - [Diagrama de Flujo del Proceso Reingenierizado](#diagrama-de-flujo-del-proceso-reingenierizado)
   - [Arquitectura del Nuevo Sistema](#arquitectura-del-nuevo-sistema)
-    - [Stack Tecnológico](#stack-tecnológico)
+    - [Stack Tecnológico                         ▼](#stack-tecnológico-------------------------)
     - [Justificación de Tecnologías](#justificación-de-tecnologías)
     - [Estructura del Proyecto](#estructura-del-proyecto)
   - [Capturas del Sistema Nuevo](#capturas-del-sistema-nuevo)
@@ -339,7 +339,8 @@ El sistema fue rediseñado siguiendo el patrón **MVC (Modelo–Vista–Controla
                           └───────────────────────────────────┘
 ```
 
-### Stack Tecnológico
+### Stack Tecnológico                         ▼
+                       ┌
 
 | Componente       | Tecnología                               |
 |------------------|------------------------------------------|
@@ -515,3 +516,7 @@ Abre el navegador en **http://localhost:8080**
 | `empleado`| `empleado` | EMPLEADO  |
 
 > **Nota:** Cambia las contraseñas por defecto en un entorno de producción.
+
+
+sudo timedatectl set-time "2027-04-15 12:00:00"
+sudo timedatectl set-ntp false

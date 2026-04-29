@@ -8,4 +8,5 @@ import com.sano.sano.models.Oficio;
 
 public interface OficioRepository extends MongoRepository<Oficio, String> {
     List<Oficio> findByNombresContainingIgnoreCase(String termino);
+    Oficio findTopByAnioOrderByNumeroOficioDesc(Integer anio);
 }

@@ -39,7 +39,13 @@ public class OficioServiceImp implements OficioService {
     public void saveOficio(OficioSaveDto oficioSaveDto) {
         Funcionario funcionario = funcionarioRepository.findById(oficioSaveDto.getFuncionarioId()).orElse(null);
 
+        int anioActual = LocalDate.now().getYear();
+        Oficio ultimoOficio = oficioRepository.findTopByAnioOrderByNumeroOficioDesc(anioActual);
+        int siguienteNumero = (ultimoOficio != null && ultimoOficio.getNumeroOficio() != null) ? ultimoOficio.getNumeroOficio() + 1 : 1;
+
         Oficio oficio = new Oficio();
+        oficio.setNumeroOficio(siguienteNumero);
+        oficio.setAnio(anioActual);
         oficio.setPaterno(oficioSaveDto.getPaterno());
         oficio.setMaterno(oficioSaveDto.getMaterno());
         oficio.setNombres(oficioSaveDto.getNombres());
@@ -148,6 +154,8 @@ public class OficioServiceImp implements OficioService {
     private OficioDto mapToDto(Oficio o) {
         OficioDto dto = new OficioDto();
         dto.setId(o.getId());
+        dto.setNumeroOficio(o.getNumeroOficio());
+        dto.setAnio(o.getAnio());
         dto.setPaterno(o.getPaterno());
         dto.setMaterno(o.getMaterno());
         dto.setNombres(o.getNombres());

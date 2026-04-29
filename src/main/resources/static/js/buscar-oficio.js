@@ -6,39 +6,39 @@
     'use strict';
 
     /* ── DOM refs ── */
-    var filterCard     = document.getElementById('filterCard');
-    var filterHeader   = document.getElementById('filterCardHeader');
-    var filterToggle   = document.getElementById('filterToggle');
+    var filterCard = document.getElementById('filterCard');
+    var filterHeader = document.getElementById('filterCardHeader');
+    var filterToggle = document.getElementById('filterToggle');
 
-    var filterCount    = document.getElementById('filterCount');
-    var chipsBar       = document.getElementById('chipsBar');
-    var chipsList      = document.getElementById('chipsList');
+    var filterCount = document.getElementById('filterCount');
+    var chipsBar = document.getElementById('chipsBar');
+    var chipsList = document.getElementById('chipsList');
 
-    var btnSearch      = document.getElementById('btnSearch');
-    var btnClear       = document.getElementById('btnClear');
+    var btnSearch = document.getElementById('btnSearch');
+    var btnClear = document.getElementById('btnClear');
 
-    var rpCount        = document.getElementById('rpCount');
-    var rpLoading      = document.getElementById('rpLoading');
-    var rpTableWrap    = document.getElementById('rpTableWrap');
-    var rpTbody        = document.getElementById('rpTbody');
-    var rpEmpty        = document.getElementById('rpEmpty');
-    var rpPagination   = document.getElementById('rpPagination');
-    var rpPagInfo      = document.getElementById('rpPagInfo');
-    var rpPagControls  = document.getElementById('rpPagControls');
+    var rpCount = document.getElementById('rpCount');
+    var rpLoading = document.getElementById('rpLoading');
+    var rpTableWrap = document.getElementById('rpTableWrap');
+    var rpTbody = document.getElementById('rpTbody');
+    var rpEmpty = document.getElementById('rpEmpty');
+    var rpPagination = document.getElementById('rpPagination');
+    var rpPagInfo = document.getElementById('rpPagInfo');
+    var rpPagControls = document.getElementById('rpPagControls');
 
     var PAGE_SIZE = 15;
     var currentPage = 0;
 
     /* ── Filter field definitions ── */
     var fields = [
-        { id: 'f-paterno',       param: 'paterno',           label: 'Paterno' },
-        { id: 'f-materno',       param: 'materno',           label: 'Materno' },
-        { id: 'f-nombres',       param: 'nombres',           label: 'Nombres' },
-        { id: 'f-asunto',        param: 'asunto',            label: 'Asunto' },
-        { id: 'f-funcionario',   param: 'funcionarioNombre', label: 'Funcionario' },
-        { id: 'f-tipo',          param: 'esRespuesta',       label: 'Tipo' },
-        { id: 'f-fechaDesde',    param: 'fechaDesde',        label: 'Desde' },
-        { id: 'f-fechaHasta',    param: 'fechaHasta',        label: 'Hasta' }
+        { id: 'f-paterno', param: 'paterno', label: 'Paterno' },
+        { id: 'f-materno', param: 'materno', label: 'Materno' },
+        { id: 'f-nombres', param: 'nombres', label: 'Nombres' },
+        { id: 'f-asunto', param: 'asunto', label: 'Asunto' },
+        { id: 'f-funcionario', param: 'funcionarioNombre', label: 'Funcionario' },
+        { id: 'f-tipo', param: 'esRespuesta', label: 'Tipo' },
+        { id: 'f-fechaDesde', param: 'fechaDesde', label: 'Desde' },
+        { id: 'f-fechaHasta', param: 'fechaHasta', label: 'Hasta' }
     ];
 
     /* ── Helpers ── */
@@ -131,19 +131,23 @@
 
         /* Build rows */
         rpTbody.innerHTML = '';
+        console.log(data);
+
         data.content.forEach(function (o, idx) {
             var tr = document.createElement('tr');
             tr.style.animationDelay = (idx * 0.03) + 's';
 
             var solicitante = escapeHtml((o.paterno || '') + ' ' + (o.materno || '') + ', ' + (o.nombres || ''));
             var funcionario = o.funcionario ? escapeHtml(o.funcionario.nombre) : '—';
-            var fecha       = formatDate(o.fecha);
-            var esResp      = o.esRespuesta === true;
-            var tipoClass   = esResp ? 'respuesta' : 'original';
-            var tipoLabel   = esResp ? 'En contestación' : 'Original';
+            var fecha = formatDate(o.fecha);
+            var esResp = o.esRespuesta === true;
+            var tipoClass = esResp ? 'respuesta' : 'original';
+            var tipoLabel = esResp ? 'En contestación' : 'Original';
+
+            console.log(o);
 
             tr.innerHTML =
-                '<td><span class="oficio-badge">' + escapeHtml(o.id || '—') + '</span></td>' +
+                '<td><span class="oficio-badge">' + escapeHtml(o.numeroOficio || '—') + '</span></td>' +
                 '<td>' + solicitante + '</td>' +
                 '<td class="asunto-cell" title="' + escapeHtml(o.asunto || '') + '">' + escapeHtml(o.asunto || '—') + '</td>' +
                 '<td>' + funcionario + '</td>' +
@@ -178,9 +182,9 @@
 
         /* Page numbers (window of 7) */
         var total = data.totalPages;
-        var cur   = data.currentPage;
+        var cur = data.currentPage;
         var start = 0;
-        var end   = total;
+        var end = total;
 
         if (total > 7) {
             if (cur <= 3) {

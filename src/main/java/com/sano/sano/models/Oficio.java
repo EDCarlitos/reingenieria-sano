@@ -1,6 +1,5 @@
 package com.sano.sano.models;
 
-
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +17,8 @@ public class Oficio {
 
     @Id
     private String id;
+    private Integer numeroOficio;
+    private Integer anio;
     private String paterno;
     private String materno;
     private String nombres;

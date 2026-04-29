@@ -5,50 +5,50 @@
     'use strict';
 
     /* ── DOM refs: filters ── */
-    var filterCard     = document.getElementById('filterCard');
-    var filterHeader   = document.getElementById('filterCardHeader');
-    var filterToggle   = document.getElementById('filterToggle');
-    var filterCount    = document.getElementById('filterCount');
-    var chipsBar       = document.getElementById('chipsBar');
-    var chipsList      = document.getElementById('chipsList');
-    var btnSearch      = document.getElementById('btnSearch');
-    var btnClear       = document.getElementById('btnClear');
+    var filterCard = document.getElementById('filterCard');
+    var filterHeader = document.getElementById('filterCardHeader');
+    var filterToggle = document.getElementById('filterToggle');
+    var filterCount = document.getElementById('filterCount');
+    var chipsBar = document.getElementById('chipsBar');
+    var chipsList = document.getElementById('chipsList');
+    var btnSearch = document.getElementById('btnSearch');
+    var btnClear = document.getElementById('btnClear');
 
     /* ── DOM refs: results ── */
-    var rpCount        = document.getElementById('rpCount');
-    var rpLoading      = document.getElementById('rpLoading');
-    var rpTableWrap    = document.getElementById('rpTableWrap');
-    var rpTbody        = document.getElementById('rpTbody');
-    var rpEmpty        = document.getElementById('rpEmpty');
-    var rpPagination   = document.getElementById('rpPagination');
-    var rpPagInfo      = document.getElementById('rpPagInfo');
-    var rpPagControls  = document.getElementById('rpPagControls');
+    var rpCount = document.getElementById('rpCount');
+    var rpLoading = document.getElementById('rpLoading');
+    var rpTableWrap = document.getElementById('rpTableWrap');
+    var rpTbody = document.getElementById('rpTbody');
+    var rpEmpty = document.getElementById('rpEmpty');
+    var rpPagination = document.getElementById('rpPagination');
+    var rpPagInfo = document.getElementById('rpPagInfo');
+    var rpPagControls = document.getElementById('rpPagControls');
 
     /* ── DOM refs: modals ── */
-    var modalEditar    = document.getElementById('modalEditar');
-    var modalEliminar  = document.getElementById('modalEliminar');
-    var formEditar     = document.getElementById('formEditar');
-    var formEliminar   = document.getElementById('formEliminar');
+    var modalEditar = document.getElementById('modalEditar');
+    var modalEliminar = document.getElementById('modalEliminar');
+    var formEditar = document.getElementById('formEditar');
+    var formEliminar = document.getElementById('formEliminar');
 
     if (!filterCard || !rpTbody) return;
 
-    var PAGE_SIZE   = 15;
+    var PAGE_SIZE = 15;
     var currentPage = 0;
-    var isAdmin     = window.IS_ADMIN || false;
+    var isAdmin = window.IS_ADMIN || false;
 
     /* In-memory map of oficios from current results page */
     var oficiosMap = {};
 
     /* ── Filter field definitions ── */
     var fields = [
-        { id: 'f-paterno',     param: 'paterno',           label: 'Paterno' },
-        { id: 'f-materno',     param: 'materno',           label: 'Materno' },
-        { id: 'f-nombres',     param: 'nombres',           label: 'Nombres' },
-        { id: 'f-asunto',      param: 'asunto',            label: 'Asunto' },
+        { id: 'f-paterno', param: 'paterno', label: 'Paterno' },
+        { id: 'f-materno', param: 'materno', label: 'Materno' },
+        { id: 'f-nombres', param: 'nombres', label: 'Nombres' },
+        { id: 'f-asunto', param: 'asunto', label: 'Asunto' },
         { id: 'f-funcionario', param: 'funcionarioNombre', label: 'Funcionario' },
-        { id: 'f-tipo',        param: 'esRespuesta',       label: 'Tipo' },
-        { id: 'f-fechaDesde',  param: 'fechaDesde',        label: 'Desde' },
-        { id: 'f-fechaHasta',  param: 'fechaHasta',        label: 'Hasta' }
+        { id: 'f-tipo', param: 'esRespuesta', label: 'Tipo' },
+        { id: 'f-fechaDesde', param: 'fechaDesde', label: 'Desde' },
+        { id: 'f-fechaHasta', param: 'fechaHasta', label: 'Hasta' }
     ];
 
     /* ═══════════════════════════════════════════
@@ -207,27 +207,31 @@
 
             var solicitante = escapeHtml((o.paterno || '') + ' ' + (o.materno || '') + ', ' + (o.nombres || ''));
             var funcionario = o.funcionario ? escapeHtml(o.funcionario.nombre) : '—';
-            var fecha       = formatDate(o.fecha);
-            var esResp      = o.esRespuesta === true;
-            var tipoClass   = esResp ? 'respuesta' : 'original';
-            var tipoLabel   = esResp ? 'En contestación' : 'Original';
+            var fecha = formatDate(o.fecha);
+            var esResp = o.esRespuesta === true;
+            var tipoClass = esResp ? 'respuesta' : 'original';
+            var tipoLabel = esResp ? 'En contestación' : 'Original';
+            const id = o.anio + "-" + o.numeroOficio;
+            console.log(o);
+            console.log(id);
+
 
             tr.innerHTML =
-                '<td><span class="oficio-badge">' + escapeHtml(o.id || '—') + '</span></td>' +
+                '<td><span class="oficio-badge">' + escapeHtml(id || '—') + '</span></td>' +
                 '<td>' + solicitante + '</td>' +
                 '<td class="asunto-cell" title="' + escapeHtml(o.asunto || '') + '">' + escapeHtml(o.asunto || '—') + '</td>' +
                 '<td>' + funcionario + '</td>' +
                 '<td>' + fecha + '</td>' +
                 '<td><span class="tipo-tag ' + tipoClass + '">' + tipoLabel + '</span></td>' +
                 '<td>' +
-                    '<div class="actions-cell">' +
-                        '<button class="btn-action btn-edit" data-id="' + escapeHtml(o.id) + '" title="Editar">' +
-                            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
-                        '</button>' +
-                        '<button class="btn-action btn-delete" data-id="' + escapeHtml(o.id) + '" title="Eliminar">' +
-                            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
-                        '</button>' +
-                    '</div>' +
+                '<div class="actions-cell">' +
+                '<button class="btn-action btn-edit" data-id="' + escapeHtml(o.id) + '" title="Editar">' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+                '</button>' +
+                '<button class="btn-action btn-delete" data-id="' + escapeHtml(o.id) + '" title="Eliminar">' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
+                '</button>' +
+                '</div>' +
                 '</td>';
 
             rpTbody.appendChild(tr);
@@ -264,13 +268,13 @@
         rpPagControls.appendChild(makePageBtn('‹', data.currentPage - 1, !data.hasPrevious));
 
         var total = data.totalPages;
-        var cur   = data.currentPage;
+        var cur = data.currentPage;
         var start = 0, end = total;
 
         if (total > 7) {
-            if (cur <= 3)            { start = 0;         end = 7; }
-            else if (cur >= total-4) { start = total - 7; end = total; }
-            else                     { start = cur - 3;   end = cur + 4; }
+            if (cur <= 3) { start = 0; end = 7; }
+            else if (cur >= total - 4) { start = total - 7; end = total; }
+            else { start = cur - 3; end = cur + 4; }
         }
 
         if (total > 7 && start > 0) {
@@ -368,12 +372,12 @@
         if (!oficio || !modalEditar) return;
 
         document.getElementById('editOficioId').value = oficio.id;
-        document.getElementById('editPaterno').value  = oficio.paterno || '';
-        document.getElementById('editMaterno').value  = oficio.materno || '';
-        document.getElementById('editNombres').value  = oficio.nombres || '';
+        document.getElementById('editPaterno').value = oficio.paterno || '';
+        document.getElementById('editMaterno').value = oficio.materno || '';
+        document.getElementById('editNombres').value = oficio.nombres || '';
         document.getElementById('editContesta').value = oficio.contesta || '';
         document.getElementById('editEsRespuesta').checked = oficio.esRespuesta;
-        document.getElementById('editAsunto').value      = oficio.asunto || '';
+        document.getElementById('editAsunto').value = oficio.asunto || '';
         document.getElementById('editObservacion').value = oficio.observacion || '';
 
         var funcSelect = document.getElementById('editFuncionarioId');
@@ -387,12 +391,12 @@
         var oficio = oficiosMap[id];
         if (!oficio || !modalEliminar) return;
 
-        document.getElementById('deleteOficioId').value   = id;
-        document.getElementById('deleteOficioNum').textContent  = '#' + oficio.id;
+        document.getElementById('deleteOficioId').value = id;
+        document.getElementById('deleteOficioNum').textContent = '#' + oficio.anio + '-' + oficio.numeroOficio;
         document.getElementById('deleteOficioName').textContent =
             (oficio.nombres || '') + ' ' + (oficio.paterno || '') + ' ' + (oficio.materno || '');
 
-        var adminGroup    = document.getElementById('adminUsernameGroup');
+        var adminGroup = document.getElementById('adminUsernameGroup');
         var passwordLabel = document.getElementById('deletePasswordLabel');
         if (isAdmin) {
             adminGroup.style.display = 'none';
@@ -402,9 +406,9 @@
             passwordLabel.textContent = 'Contraseña del administrador *';
         }
 
-        document.getElementById('deleteMotivo').value        = '';
-        document.getElementById('deleteAdminUsername').value  = '';
-        document.getElementById('deletePassword').value      = '';
+        document.getElementById('deleteMotivo').value = '';
+        document.getElementById('deleteAdminUsername').value = '';
+        document.getElementById('deletePassword').value = '';
 
         openModal(modalEliminar);
     }
@@ -416,15 +420,15 @@
             var submitBtn = formEditar.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
 
-            var id   = document.getElementById('editOficioId').value;
+            var id = document.getElementById('editOficioId').value;
             var body = {
-                paterno:       document.getElementById('editPaterno').value,
-                materno:       document.getElementById('editMaterno').value,
-                nombres:       document.getElementById('editNombres').value,
-                contesta:      document.getElementById('editContesta').value,
-                esRespuesta:   document.getElementById('editEsRespuesta').checked,
-                asunto:        document.getElementById('editAsunto').value,
-                observacion:   document.getElementById('editObservacion').value,
+                paterno: document.getElementById('editPaterno').value,
+                materno: document.getElementById('editMaterno').value,
+                nombres: document.getElementById('editNombres').value,
+                contesta: document.getElementById('editContesta').value,
+                esRespuesta: document.getElementById('editEsRespuesta').checked,
+                asunto: document.getElementById('editAsunto').value,
+                observacion: document.getElementById('editObservacion').value,
                 funcionarioId: document.getElementById('editFuncionarioId').value
             };
 
@@ -454,10 +458,10 @@
             var submitBtn = formEliminar.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
 
-            var id   = document.getElementById('deleteOficioId').value;
+            var id = document.getElementById('deleteOficioId').value;
             var body = {
                 motivoEliminacion: document.getElementById('deleteMotivo').value,
-                password:          document.getElementById('deletePassword').value
+                password: document.getElementById('deletePassword').value
             };
             if (!isAdmin) {
                 body.username = document.getElementById('deleteAdminUsername').value;

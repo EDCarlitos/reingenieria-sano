@@ -8,13 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OficioDto {
 
     protected String id;
+    protected Integer numeroOficio;
+    protected Integer anio;
     protected String paterno;
     protected String materno;
     protected String nombres;
